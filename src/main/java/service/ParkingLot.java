@@ -1,3 +1,8 @@
+package service;
+
+import exception.ParkingLotException;
+import model.Car;
+
 import java.util.*;
 
 public class ParkingLot {
@@ -17,14 +22,14 @@ public class ParkingLot {
             carMap.put(registration, new Car(registration, model));
             return carMap.size();
         }
-        throw new ParkingLotException("ParkingLot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
+        throw new ParkingLotException("service.ParkingLot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
     }
     public boolean unParkCar (String registration) throws ParkingLotException {
         if (carMap.containsKey(registration)) {
             carMap.remove(registration);
             return true;
         }
-         throw  new ParkingLotException("No such Car exist",ParkingLotException.ExceptionType.WRONG_DETAILS);
+         throw  new ParkingLotException("No such model.Car exist", ParkingLotException.ExceptionType.WRONG_DETAILS);
     }
 
     public int getParkingAllotmentDetails() throws ParkingLotException {
@@ -35,6 +40,6 @@ public class ParkingLot {
         if (i == capacity){
             return capacity;
         }
-        throw new ParkingLotException("ParkingLot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
+        throw new ParkingLotException("service.ParkingLot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
     }
 }
