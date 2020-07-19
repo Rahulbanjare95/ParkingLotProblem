@@ -6,6 +6,7 @@ import service.ParkingLot;
 import service.ParkingLotControllers;
 
 public class ParkingLotTest {
+
     ParkingLot parkingLot = new ParkingLot();
 
     @Test
@@ -44,13 +45,12 @@ public class ParkingLotTest {
     @Test
     public void givenMultipleCarDetails_whenTriedToExceedParkingLimit_ShouldThrowException() {
         try {
-           parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
-           parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
-           parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
-           parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
-           parkingLot.getParkingAllotmentDetails();
+            parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
+            parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
+            parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
+            parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
+            parkingLot.getParkingAllotmentDetails();
         } catch (ParkingLotException e) {
-            e.printStackTrace();
             Assert.assertEquals(ParkingLotException.ExceptionType.PARKING_LOT_FULL, e.type);
         }
     }
@@ -75,8 +75,8 @@ public class ParkingLotTest {
         parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
         try {
             parkingLot.unParkCar("DL03C0003");
-            Assert.assertTrue(ParkingLotControllers.PARKING_LOT_OWNER.isParkingLotFull);
         } catch (ParkingLotException e) {
+            Assert.assertTrue(ParkingLotControllers.PARKING_LOT_OWNER.isParkingLotFull);
 
         }
     }
