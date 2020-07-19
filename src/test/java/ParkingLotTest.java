@@ -3,7 +3,7 @@ import model.Car;
 import org.junit.Assert;
 import org.junit.Test;
 import service.ParkingLot;
-import service.ParkingLotControllers;
+import enums.ParkingLotControllers;
 
 public class ParkingLotTest {
 

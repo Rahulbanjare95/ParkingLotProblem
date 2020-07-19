@@ -1,4 +1,4 @@
-package service;
+package enums;
 
 public enum ParkingLotControllers {
     AIRPORT_SECURITY(true), PARKING_LOT_OWNER(false);
