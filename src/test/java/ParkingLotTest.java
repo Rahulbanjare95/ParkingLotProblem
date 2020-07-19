@@ -15,14 +15,14 @@ public class ParkingLotTest {
 
     @Test
     public void givenOneCarWithDetails_whenParked_ShouldReturnOneCar() throws ParkingLotException {
-        int i = parkingLot.parkWithDetails("CG11M7393", "HyundaiVerna");
-        Assert.assertEquals(1, i);
+        int numberOfParkedCars = parkingLot.parkWithDetails("CG11M7393", "HyundaiVerna");
+        Assert.assertEquals(1, numberOfParkedCars);
     }
 
     @Test
     public void givenCarWithDetails_whenUnParked_ShouldReturnTrue() {
         try {
-            int i = parkingLot.parkWithDetails("CG11M7393", "HyundaiVerna");
+            parkingLot.parkWithDetails("CG11M7393", "HyundaiVerna");
             boolean isUnPark = parkingLot.unParkCar("CG11M7393");
             Assert.assertTrue(isUnPark);
         } catch (ParkingLotException e) {
@@ -33,24 +33,39 @@ public class ParkingLotTest {
     @Test
     public void givenCarDetailsIncorrect_WhenUnParked_ShouldThrowException() {
         try {
-            int i = parkingLot.parkWithDetails("CG11M7393", "HyundaiVerna");
-            boolean isUnPark = parkingLot.unParkCar("CG11M793");
+            parkingLot.parkWithDetails("CG11M7393", "HyundaiVerna");
+            boolean isUnPark = parkingLot.unParkCar("CG11M0001");
         } catch (ParkingLotException e) {
-            e.printStackTrace();
+            Assert.assertEquals(ParkingLotException.ExceptionType.WRONG_DETAILS, e.type);
         }
     }
 
     @Test
-    public void givenMultipleCarDetails_whenTriedToExceedParkingLimit_ShouldThrowException() throws ParkingLotException {
-        int b = parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
-        int b1 = parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
-        int b2 = parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
-        int b3 = parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
+    public void givenMultipleCarDetails_whenTriedToExceedParkingLimit_ShouldThrowException() {
         try {
-            int parkingAllotmentDetails = parkingLot.getParkingAllotmentDetails();
+           parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
+           parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
+           parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
+           parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
+           parkingLot.getParkingAllotmentDetails();
         } catch (ParkingLotException e) {
             e.printStackTrace();
+            Assert.assertEquals(ParkingLotException.ExceptionType.PARKING_LOT_FULL, e.type);
         }
-
     }
+
+    @Test
+    public void givenMultipleCarsToFullParkingLot_WhenInformedToAirportSecurity_shouldReturnTrue() {
+        try {
+          parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
+          parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
+          parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
+          parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
+        } catch (ParkingLotException e) {
+            Assert.assertTrue(ParkingLotControllers.AIRPORT_SECURITY.isParkingLotFull);
+        }
+    }
+
+
+
 }
