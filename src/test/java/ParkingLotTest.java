@@ -3,6 +3,7 @@ import model.Car;
 import org.junit.Assert;
 import org.junit.Test;
 import service.ParkingLot;
+import service.ParkingLotControllers;
 
 public class ParkingLotTest {
     ParkingLot parkingLot = new ParkingLot();
@@ -56,16 +57,27 @@ public class ParkingLotTest {
 
     @Test
     public void givenMultipleCarsToFullParkingLot_WhenInformedToAirportSecurity_shouldReturnTrue() {
+        parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
+        parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
+        parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
+        parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
         try {
-          parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
-          parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
-          parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
-          parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
+            parkingLot.getParkingAllotmentDetails();
         } catch (ParkingLotException e) {
             Assert.assertTrue(ParkingLotControllers.AIRPORT_SECURITY.isParkingLotFull);
         }
     }
 
+    @Test
+    public void givenFullOccupiedParkingLot_WhenSpaceIsFreeAgainInformOwner_shouldReturnTrue() {
+        parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
+        parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
+        parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
+        try {
+            parkingLot.unParkCar("DL03C0003");
+            Assert.assertTrue(ParkingLotControllers.PARKING_LOT_OWNER.isParkingLotFull);
+        } catch (ParkingLotException e) {
 
-
+        }
+    }
 }
