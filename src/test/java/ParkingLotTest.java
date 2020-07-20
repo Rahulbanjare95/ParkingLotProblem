@@ -16,7 +16,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenOneCarWithDetails_whenParked_ShouldReturnOneCar() throws ParkingLotException {
+    public void givenOneCarWithDetails_whenParked_ShouldReturnOneCar()  {
         int numberOfParkedCars = parkingLot.parkWithDetails("CG11M7393", "HyundaiVerna");
         Assert.assertEquals(1, numberOfParkedCars);
     }
