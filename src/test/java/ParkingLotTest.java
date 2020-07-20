@@ -42,10 +42,10 @@ public class ParkingLotTest {
 
     @Test
     public void givenMultipleCarDetails_whenTriedToExceedParkingLimit_ShouldThrowException() throws ParkingLotException {
-        int b = parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
-        int b1 = parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
-        int b2 = parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
-        int b3 = parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
+        parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
+        parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
+        parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
+        parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
         try {
             int parkingAllotmentDetails = parkingLot.getParkingAllotmentDetails();
         } catch (ParkingLotException e) {

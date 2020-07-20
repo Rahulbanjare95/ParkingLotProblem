@@ -22,7 +22,7 @@ public class ParkingLot {
             carMap.put(registration, new Car(registration, model));
             return carMap.size();
         }
-        throw new ParkingLotException("service.ParkingLot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
+        throw new ParkingLotException("ParkingLot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
     }
     public boolean unParkCar (String registration) throws ParkingLotException {
         if (carMap.containsKey(registration)) {
@@ -40,6 +40,6 @@ public class ParkingLot {
         if (i == capacity){
             return capacity;
         }
-        throw new ParkingLotException("service.ParkingLot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
+        throw new ParkingLotException("ParkingLot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
     }
 }
