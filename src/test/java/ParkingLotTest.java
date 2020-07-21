@@ -28,7 +28,7 @@ public class ParkingLotTest {
 
     @Test
     public void givenNull_whenParked_ShouldReturnFalse() {
-        parkingLot.park(null);
+        parkingLot.park(vehicle);
         boolean isParked = parkingLot.park(null);
         Assert.assertFalse(isParked);
 

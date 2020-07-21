@@ -6,7 +6,6 @@ public class ParkingLot {
     }
 
     public boolean park(Object vehicle) {
-        if(this.vehicle == null) return false;
         if( this.vehicle != null )
             return false;
         this.vehicle = vehicle;
