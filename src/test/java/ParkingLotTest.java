@@ -1,56 +1,72 @@
-import exception.ParkingLotException;
-import model.Car;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import service.ParkingLot;
 
 public class ParkingLotTest {
-    ParkingLot parkingLot = new ParkingLot();
+
+    Object vehicle = null;
+    ParkingLot parkingLot = null;
+
+    @Before
+    public void setUp() throws Exception {
+        vehicle = new Object();
+        parkingLot = new ParkingLot();
+    }
 
     @Test
-    public void givenCar_whenParked_ShouldReturnTrue() {
-        boolean isParked = parkingLot.park(new Car());
+    public void givenAVehicle_whenParked_ShouldReturnTrue() {
+        boolean isParked = parkingLot.park(new Object());
         Assert.assertTrue(isParked);
     }
 
     @Test
-    public void givenOneCarWithDetails_whenParked_ShouldReturnOneCar() throws ParkingLotException {
-        int i = parkingLot.parkWithDetails("CG11M7393", "HyundaiVerna");
-        Assert.assertEquals(1, i);
+    public void givenAVehicle_whenAlreadyParked_ShouldReturnFalse() {
+        parkingLot.park(vehicle);
+        boolean isParked = parkingLot.park(vehicle);
+        Assert.assertFalse(isParked);
     }
 
     @Test
-    public void givenCarWithDetails_whenUnParked_ShouldReturnTrue() {
+    public void givenNull_whenParked_ShouldReturnFalse() {
+        parkingLot.park(null);
+        boolean isParked = parkingLot.park(null);
+        Assert.assertFalse(isParked);
+
+    }
+
+    @Test
+    public void givenAVehicle_whenUnParked_ShouldReturnTrue() {
         try {
-            int i = parkingLot.parkWithDetails("CG11M7393", "HyundaiVerna");
-            boolean isUnPark = parkingLot.unParkCar("CG11M7393");
-            Assert.assertTrue(isUnPark);
+            parkingLot.park(vehicle);
+            boolean isUnParked = parkingLot.unPark(vehicle);
+            Assert.assertTrue(isUnParked);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void givenCarDetailsIncorrect_WhenUnParked_ShouldThrowException() {
+    public void givenVehicle_whenUnParkedAlready_ShouldReturnException() {
         try {
-            int i = parkingLot.parkWithDetails("CG11M7393", "HyundaiVerna");
-            boolean isUnPark = parkingLot.unParkCar("CG11M793");
-        } catch (ParkingLotException e) {
+            parkingLot.park(vehicle);
+            parkingLot.unPark(vehicle);
+            boolean isUnParked = parkingLot.unPark(vehicle);
+            Assert.assertFalse(isUnParked);
+        } catch (ParkingLotException | NullPointerException e) {
             e.printStackTrace();
+
         }
+
     }
 
     @Test
-    public void givenMultipleCarDetails_whenTriedToExceedParkingLimit_ShouldThrowException() throws ParkingLotException {
-        parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
-        parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
-        parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
-        parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
+    public void givenNull_whenUnParked_ShouldReturnFalse() {
         try {
-            int parkingAllotmentDetails = parkingLot.getParkingAllotmentDetails();
+            parkingLot.park(null);
+            boolean isUnParked = parkingLot.unPark(null);
+            Assert.assertFalse(isUnParked);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
-
     }
 }
