@@ -1,10 +1,10 @@
 package service;
 
+public class Owner implements IObserver {
 
-
-public class Driver implements IObserver {
     @Override
     public boolean isParkedAt(boolean b) {
         return true;
     }
+
 }

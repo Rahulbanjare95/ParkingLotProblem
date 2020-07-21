@@ -9,10 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ParkingLot<capacity> {
+public class ParkingLot<capacity> implements IParkingLot {
 
     Car car = new Car();
     private ParkingLotControllers parkingLotControllers;
+    IObserver owner = new Owner();
 
     Map<String, Car> carMap = new HashMap<>();
     HashMap<Integer,Car> mapSlot=new HashMap<Integer,Car>();
@@ -32,7 +33,7 @@ public class ParkingLot<capacity> {
         return carMap.size();
     }
 
-    public boolean unParkCar(String registration) throws ParkingLotException {
+    public boolean unParkCar(String registration)  {
         if (carMap.containsKey(registration)) {
             carMap.remove(registration);
 
@@ -43,6 +44,7 @@ public class ParkingLot<capacity> {
 
     public int getParkingAllotmentDetails() throws ParkingLotException {
         int numberOfCars = this.parkWithDetails(registration, model);
+
         if (numberOfCars <= capacity) {
             this.parkingLotControllers.PARKING_LOT_OWNER.isParkingLotFull = false;
             this.parkingLotControllers.AIRPORT_SECURITY.isParkingLotFull = false;
@@ -57,14 +59,15 @@ public class ParkingLot<capacity> {
             return mapSlot;
         }
 
-        public boolean isParkedAt(Integer position) throws ParkingLotException {
-                this.parkWithSlot(position, registration, model);
-
-                if(position.equals(slot.get(position))){
-                    return  true;
-                }
-                throw new ParkingLotException("Car not at provided position", ParkingLotException.ExceptionType.WRONG_DETAILS);
-
+        @Override
+        public boolean isParkedAt(Integer position) {
+            this.parkWithSlot(position, registration, model);
+            if(position > slot.size())
+                throw new ArrayIndexOutOfBoundsException();
+            if (position.equals(slot.get(position))) {
+                return true;
+            }
+            throw new ParkingLotException("No such position", ParkingLotException.ExceptionType.WRONG_DETAILS);
         }
 
 }
