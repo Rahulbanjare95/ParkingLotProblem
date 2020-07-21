@@ -1,8 +1,9 @@
 
 public class ParkingLot {
-    Car car = new Car();
+    public ParkingLot() {
+    }
 
-    public boolean park(Car car) {
+    public boolean park(Object vechicle) {
         return true;
     }
 

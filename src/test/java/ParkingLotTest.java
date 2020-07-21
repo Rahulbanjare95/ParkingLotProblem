@@ -3,9 +3,9 @@ import org.junit.Test;
 
 public class ParkingLotTest {
     @Test
-    public void givenCar_whenParked_ShouldReturnTrue() {
+    public void givenAVehicle_whenParked_ShouldReturnTrue() {
         ParkingLot parkingLot = new ParkingLot();
-        boolean isParked = parkingLot.park(new  Car());
+        boolean isParked = parkingLot.park(new  Object());
         Assert.assertTrue(isParked);
     }
 }
