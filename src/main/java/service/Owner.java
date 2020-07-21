@@ -3,7 +3,7 @@ package service;
 public class Owner implements IObserver {
 
     @Override
-    public boolean parkedAt() {
-        return true;
+    public boolean isParkedAt(boolean parkedAt) {
+        return false;
     }
 }
