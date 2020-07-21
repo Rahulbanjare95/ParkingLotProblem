@@ -95,6 +95,17 @@ public class ParkingLotTest {
         }
     }
 
+    @Test
+    public void givenCarSlotCorrectly_whenDriverWantsToCheck_shouldReturnTrue() {
+        try {
+            parkingLot.parkWithSlot(1,"CG11M7393", "Hyundai Verna");
+            parkingLot.parkWithSlot(2,"CG04Z1122", "Skoda Rapid");
+            boolean parkedAt = parkingLot.isParkedAt(2);
+            Assert.assertTrue(parkedAt);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
