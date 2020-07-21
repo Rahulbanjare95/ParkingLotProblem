@@ -50,34 +50,51 @@ public class ParkingLotTest {
             parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
             parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
             parkingLot.getParkingAllotmentDetails();
+
         } catch (ParkingLotException e) {
             Assert.assertEquals(ParkingLotException.ExceptionType.PARKING_LOT_FULL, e.type);
         }
     }
 
     @Test
-    public void givenMultipleCarsToFullParkingLot_WhenInformedToAirportSecurity_shouldReturnTrue() {
+    public void givenMultipleCarsToFullParkingLot_WhenInformedToAirportSecurity_ShouldInformByTrue() {
         parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
         parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
         parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
         parkingLot.parkWithDetails("MH04CD1011", "Mercedes-Benz S-Class");
         try {
             parkingLot.getParkingAllotmentDetails();
-        } catch (ParkingLotException e) {
             Assert.assertTrue(ParkingLotControllers.AIRPORT_SECURITY.isParkingLotFull);
+        } catch (ParkingLotException e) {
+           e.printStackTrace();
         }
     }
 
     @Test
-    public void givenFullOccupiedParkingLot_WhenSpaceIsFreeAgainInformOwner_shouldReturnTrue() {
+    public void givenFullOccupiedParkingLot_WhenSpaceIsFreeAgainInformOwner_shouldInformOwnerByFalse() {
         parkingLot.parkWithDetails("CG11M7393", "Hyundai Verna");
         parkingLot.parkWithDetails("KA01B1212", "BMW 720D");
         parkingLot.parkWithDetails("DL03C0003", "Mercedes-Benz S-Class");
         try {
             parkingLot.unParkCar("DL03C0003");
+            parkingLot.getParkingAllotmentDetails();
+            Assert.assertFalse(ParkingLotControllers.PARKING_LOT_OWNER.isParkingLotFull);
         } catch (ParkingLotException e) {
-            Assert.assertTrue(ParkingLotControllers.PARKING_LOT_OWNER.isParkingLotFull);
-
+           e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenCar_WhenParkedByAttendant_ShouldParkAtSpecificPosition() {
+        try {
+            parkingLot.parkWithSlot(1,"CG11M7393", "Hyundai Verna" );
+            boolean parkedAt = parkingLot.isParkedAt(1);
+            Assert.assertTrue(parkedAt);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
