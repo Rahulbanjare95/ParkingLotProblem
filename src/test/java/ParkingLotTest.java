@@ -2,6 +2,7 @@ import exception.ParkingLotException;
 import model.Car;
 import org.junit.Assert;
 import org.junit.Test;
+import service.Driver;
 import service.Owner;
 import service.ParkingLot;
 import enums.ParkingLotControllers;
@@ -103,7 +104,8 @@ public class ParkingLotTest {
             parkingLot.parkWithSlot(1,"CG11M7393", "Hyundai Verna");
             parkingLot.parkWithSlot(2,"CG04Z1122", "Skoda Rapid");
             boolean parkedAt = parkingLot.isParkedAt(2);
-            Assert.assertTrue(parkedAt);
+            Driver driver = new Driver();
+            Assert.assertTrue(driver.isParkedAt(parkedAt));
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
