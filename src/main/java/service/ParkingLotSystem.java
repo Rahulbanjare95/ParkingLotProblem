@@ -4,16 +4,13 @@ import enums.ParkingLotControllers;
 import exception.ParkingLotException;
 import model.Car;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ParkingLot<capacity> implements IParkingLot {
+public class ParkingLotSystem implements IParkingLot {
 
     Car car = new Car();
     private ParkingLotControllers parkingLotControllers;
-    IObserver owner = new Owner();
+    Owner owner = new Owner();
 
     Map<String, Car> carMap = new HashMap<>();
     HashMap<Integer,Car> mapSlot=new HashMap<Integer,Car>();
@@ -24,9 +21,10 @@ public class ParkingLot<capacity> implements IParkingLot {
 
     String registration;
     String model;
-    int position;
+    Integer position;
     int capacity = 3;
     List<Integer> slot = new ArrayList<>();
+    List<Double> parkingTime = new ArrayList<>();
     public int parkWithDetails(String registration, String model) {
         carMap.put(registration, new Car(registration, model));
 
@@ -53,10 +51,34 @@ public class ParkingLot<capacity> implements IParkingLot {
         throw new ParkingLotException("Parking Lot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
     }
 
-        public HashMap<Integer, Car> parkWithSlot(Integer position, String registration, String model) {
+        public void initializeMap(Integer position, String registration, String model){
+
+            for (int i = 1; i <= capacity ; i++) {
+                mapSlot.put(i,null);
+            }
+        
+        }
+
+        public void parkWithSlot(Integer position, String registration, String model) {
             mapSlot.put(position, new Car(registration,model));
             slot.add(position);
-            return mapSlot;
+        }
+        public void initaliseparkingtime(Integer position){
+            for(int i =0 ; i<= mapSlot.size(); i++ )
+            {
+                parkingTime.add(i,null);
+            }
+    }
+        public void parkCarWithTiming(Integer position, String registration, double timing){
+            mapSlot.put(position, new Car(registration));
+
+           parkingTime.add(position,timing);
+        }
+
+        double timing;
+        public boolean getTime(Integer position){
+            this.parkCarWithTiming(position, registration, timing);
+            return parkingTime.contains(timing);
         }
 
         @Override

@@ -4,12 +4,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import service.Driver;
 import service.Owner;
-import service.ParkingLot;
+import service.ParkingLotSystem;
 import enums.ParkingLotControllers;
 
-public class ParkingLotTest {
+public class ParkingLotSystemTest {
 
-    ParkingLot parkingLot = new ParkingLot();
+    ParkingLotSystem parkingLot = new ParkingLotSystem();
 
     @Test
     public void givenCar_whenParked_ShouldReturnTrue() {
@@ -92,6 +92,7 @@ public class ParkingLotTest {
             parkingLot.parkWithSlot(1,"CG11M7393", "Hyundai Verna" );
             boolean parkedAt = parkingLot.isParkedAt(1);
             Owner owner = new Owner();
+
             Assert.assertTrue(owner.isParkedAt(parkedAt));
         } catch (ParkingLotException e) {
             e.printStackTrace();
@@ -103,13 +104,20 @@ public class ParkingLotTest {
         try {
             parkingLot.parkWithSlot(1,"CG11M7393", "Hyundai Verna");
             parkingLot.parkWithSlot(2,"CG04Z1122", "Skoda Rapid");
-            boolean parkedAt = parkingLot.isParkedAt(2);
+            boolean isParked = parkingLot.isParkedAt(2);
             Driver driver = new Driver();
-            Assert.assertTrue(driver.isParkedAt(parkedAt));
+            Assert.assertTrue(driver.isAvailable(isParked));
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
     }
 
+    @Test
+    public void givenCar_whenParkedWithTime_ShouldReturnParkedTime() {
+        parkingLot.parkCarWithTiming(0,"CG11M1234",10.00);
+        boolean time = parkingLot.getTime(0);
+        Assert.assertTrue(time);
 
+
+    }
 }
