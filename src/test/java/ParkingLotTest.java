@@ -4,12 +4,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import service.Driver;
 import service.Owner;
-import service.ParkingLotSystem;
+import service.ParkingLot;
 import enums.ParkingLotControllers;
 
-public class ParkingLotSystemTest {
+public class ParkingLotTest {
 
-    ParkingLotSystem parkingLot = new ParkingLotSystem();
+    ParkingLot parkingLot = new ParkingLot();
 
     @Test
     public void givenCar_whenParked_ShouldReturnTrue() {
@@ -115,9 +115,9 @@ public class ParkingLotSystemTest {
     @Test
     public void givenCar_whenParkedWithTime_ShouldReturnParkedTime() {
         parkingLot.parkCarWithTiming(0,"CG11M1234",10.00);
-        boolean time = parkingLot.getTime(0);
-        Assert.assertTrue(time);
-
-
+        parkingLot.parkCarWithTiming(1,"CG05M0000",12.20);
+        Double time = parkingLot.getTime(1);
+        Assert.assertEquals(12.20,time,0.0);
     }
+
 }

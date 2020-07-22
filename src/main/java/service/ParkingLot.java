@@ -6,7 +6,7 @@ import model.Car;
 
 import java.util.*;
 
-public class ParkingLotSystem implements IParkingLot {
+public class ParkingLot implements IParkingLot {
 
     Car car = new Car();
     private ParkingLotControllers parkingLotControllers;
@@ -71,14 +71,13 @@ public class ParkingLotSystem implements IParkingLot {
     }
         public void parkCarWithTiming(Integer position, String registration, double timing){
             mapSlot.put(position, new Car(registration));
-
-           parkingTime.add(position,timing);
+           parkingTime.add(timing);
         }
 
         double timing;
-        public boolean getTime(Integer position){
+        public Double getTime(Integer position){
             this.parkCarWithTiming(position, registration, timing);
-            return parkingTime.contains(timing);
+            return parkingTime.get(position);
         }
 
         @Override
