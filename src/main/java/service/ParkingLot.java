@@ -4,6 +4,7 @@ import enums.ParkingLotControllers;
 import exception.ParkingLotException;
 import model.Car;
 
+import java.time.LocalTime;
 import java.util.*;
 
 public class ParkingLot implements IParkingLot {
@@ -25,8 +26,8 @@ public class ParkingLot implements IParkingLot {
     int capacity = 3;
     List<Integer> slot = new ArrayList<>();
     List<Double> parkingTime = new ArrayList<>();
-    public int parkWithDetails(String registration, String model) {
-        carMap.put(registration, new Car(registration, model));
+    public int parkWithDetails(String registration) {
+        carMap.put(registration, new Car(registration));
 
         return carMap.size();
     }
@@ -34,55 +35,36 @@ public class ParkingLot implements IParkingLot {
     public boolean unParkCar(String registration)  {
         if (carMap.containsKey(registration)) {
             carMap.remove(registration);
-
             return true;
         }
         throw new ParkingLotException("No such model exist", ParkingLotException.ExceptionType.WRONG_DETAILS);
     }
 
-    public int getParkingAllotmentDetails() throws ParkingLotException {
-        int numberOfCars = this.parkWithDetails(registration, model);
+    public void getParkingAllotmentDetails() throws ParkingLotException {
+        int numberOfCars = this.parkWithDetails(registration);
 
         if (numberOfCars <= capacity) {
-            this.parkingLotControllers.PARKING_LOT_OWNER.isParkingLotFull = false;
-            this.parkingLotControllers.AIRPORT_SECURITY.isParkingLotFull = false;
-            return numberOfCars;
+            ParkingLotControllers.PARKING_LOT_OWNER.isParkingLotFull = false;
+            ParkingLotControllers.AIRPORT_SECURITY.isParkingLotFull = false;
+            return;
         }
         throw new ParkingLotException("Parking Lot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
     }
 
-        public void initializeMap(Integer position, String registration, String model){
-
-            for (int i = 1; i <= capacity ; i++) {
-                mapSlot.put(i,null);
-            }
-        
-        }
-
-        public void parkWithSlot(Integer position, String registration, String model) {
-            mapSlot.put(position, new Car(registration,model));
+    public void parkWithSlot(Integer position, String registration) {
+            mapSlot.put(position, new Car(registration));
             slot.add(position);
         }
-        public void initaliseparkingtime(Integer position){
-            for(int i =0 ; i<= mapSlot.size(); i++ )
-            {
-                parkingTime.add(i,null);
-            }
-    }
-        public void parkCarWithTiming(Integer position, String registration, double timing){
-            mapSlot.put(position, new Car(registration));
-           parkingTime.add(timing);
-        }
 
-        double timing;
-        public Double getTime(Integer position){
-            this.parkCarWithTiming(position, registration, timing);
-            return parkingTime.get(position);
+    public void parkCarWithTiming(Integer position, String registration, double timing){
+            mapSlot.put(position, new Car(registration));
+            parkingTime.add(timing);
+
         }
 
         @Override
         public boolean isParkedAt(Integer position) {
-            this.parkWithSlot(position, registration, model);
+            this.parkWithSlot(position, registration);
             if(position > slot.size())
                 throw new ArrayIndexOutOfBoundsException();
             if (position.equals(slot.get(position))) {
@@ -91,4 +73,10 @@ public class ParkingLot implements IParkingLot {
             throw new ParkingLotException("No such position", ParkingLotException.ExceptionType.WRONG_DETAILS);
         }
 
+
+    public LocalTime getParkingTime(int position, String registration) {
+            this.parkWithSlot(position, registration);
+            LocalTime parkedTime = LocalTime.now().withNano(0);
+            return parkedTime;
+    }
 }
