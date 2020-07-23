@@ -6,4 +6,5 @@ public class Owner implements IObserver {
     public boolean isParkedAt(boolean parkedAt) {
         return false;
     }
+
 }
