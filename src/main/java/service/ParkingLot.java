@@ -53,7 +53,7 @@ public class ParkingLot {
         }
 
     }
-    public int isVehiclePresent(String registration) throws ParkingLotException {
+    public int vehiclePresentPosition(String registration) throws ParkingLotException {
         this.parkWithDetails(position,registration);
         if( parking.contains(registration)){
            return this.getKey(mapSlot,registration);
@@ -81,7 +81,7 @@ public class ParkingLot {
     }
 
     public LocalTime getParkingTime( String registration) throws ParkingLotException {
-        this.isVehiclePresent(registration);
+        this.vehiclePresentPosition(registration);
         return LocalTime.now().withNano(0);
 
     }
