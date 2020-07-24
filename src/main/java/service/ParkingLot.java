@@ -1,5 +1,4 @@
 package service;
-
 import exception.ParkingLotException;
 import model.Car;
 import observer.IObserver;
@@ -23,7 +22,6 @@ public class ParkingLot {
         }
     }
 
-//    Map<String, Car> carMap = new HashMap<>();
     HashMap<Integer,String> mapSlot=new HashMap<Integer, String>();
     public void registerObserver(IObserver observer) {
         this.observers.add(observer);
@@ -56,7 +54,7 @@ public class ParkingLot {
     public int vehiclePresentPosition(String registration) throws ParkingLotException {
         this.parkWithDetails(position,registration);
         if( parking.contains(registration)){
-           return this.getKey(mapSlot,registration);
+            return this.getKey(mapSlot,registration);
         }
         else return 0;
 
@@ -104,14 +102,7 @@ public class ParkingLot {
         if (size < capacity) {
             return (capacity - size);
         }
-
         throw new ParkingLotException("Parking Lot Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
     }
 
-//
-//    public LocalTime getParkingTime(int position, String registration) {
-//            this.parkWithSlot(position, registration);
-//            LocalTime parkedTime = LocalTime.now().withNano(0);
-//            return parkedTime;
-//    }
 }
