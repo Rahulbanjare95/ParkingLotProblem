@@ -109,7 +109,7 @@ public class ParkingLotTest {
     @Test
     public void givenCar_whenParked_ShouldReturnTime() {
         try {
-            int slotPositionToPark = parkingLot.getSlotPositionToPark();
+            int slotPositionToPark = parkingLot.getSlotPositionToPark(1);
             parkingLot.parkWithDetails(slotPositionToPark,"CG04Z1122");
             LocalTime parkedTime = parkingLot.getParkingTime("CG04Z1122");
             LocalTime current = LocalTime.now().withNano(0);
@@ -120,4 +120,24 @@ public class ParkingLotTest {
         }
     }
 
+    @Test
+    public void givenVehicle_whenParkedinMultipleLots_ShouldBeParkedEvenly() {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
+        try {
+            parkingLotSystem.parkVehicle("CG11M0000");
+            parkingLotSystem.parkVehicle("CG11M0001");
+            String locationParkingForFirst = parkingLotSystem.location("CG11M0000");
+            String locationParkingForSecond = parkingLotSystem.location("CG11M0001");
+            String expectedForFirst = "1:1";
+            String expectedForSecond = "2:1";
+            Assert.assertEquals(expectedForFirst,locationParkingForFirst);
+            Assert.assertEquals(expectedForSecond,locationParkingForSecond);
+
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
+
