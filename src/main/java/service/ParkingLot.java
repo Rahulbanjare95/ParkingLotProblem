@@ -21,8 +21,6 @@ public class ParkingLot {
         slotDetails = new SlotDetails();
         carsParkingDetails = new LinkedHashMap<>();
         IntStream.rangeClosed(1, (capacity)).forEach(slotNumber -> carsParkingDetails.put(slotNumber, slotDetails));
-
-
     }
     public void initialiseMap(int capacity){
         for(int i =1; i<=capacity; i++ ){
@@ -37,35 +35,29 @@ public class ParkingLot {
         this.observers.add(observer);
     }
 
-    public void setCarsParkingDetailsMap(int capacity){
-        this.initialiseMap(capacity);
-    }
-
-
-
     public boolean park(Car car) {
         return true;
     }
-
     String registration;
     Integer position;
     List<Map<String, Car>> parking = new ArrayList<>();
 
-
     public void parkWithDetails(Integer position ,String registration) throws  ParkingLotException {
 
-        if(mapSlot.containsValue(registration))
-            throw  new ParkingLotException("Already parked", ParkingLotException.ExceptionType.WRONG_DETAILS);
+
         if( mapSlot.size() > capacity){
             for (IObserver observer: observers){
                 observer.parkingLotFull(true);
             }throw new ParkingLotException("Parking Full",
                     ParkingLotException.ExceptionType.PARKING_LOT_FULL);
         }
+        if(mapSlot.containsValue(registration))
+            throw  new ParkingLotException("Already parked", ParkingLotException.ExceptionType.WRONG_DETAILS);
         if( mapSlot.size() < capacity) {
 
             mapSlot.put(position,registration);
         }
+
 
     }
     public int vehiclePresentPosition(String registration) throws ParkingLotException {
@@ -74,7 +66,6 @@ public class ParkingLot {
             return this.getKey(mapSlot,registration);
         }
         else return 0;
-
     }
 
     public <K, V> K getKey(Map<K, V> map, V value) {
@@ -90,16 +81,14 @@ public class ParkingLot {
         return getKey(mapSlot, registration);
     }
 
-    public int getSlotPositionToPark(int capacity) throws ParkingLotException {
+    public int getSlotPositionToPark(int capacity) {
         this.initialiseMap(capacity);
         return getKey(mapSlot," ");
     }
 
-
     public LocalTime getParkingTime( String registration) throws ParkingLotException {
         this.vehiclePresentPosition(registration);
-        return LocalTime.now().withNano(0);
-
+        return slotDetails.getTime();
     }
 
     public boolean unParkCar(String registration) throws ParkingLotException {
@@ -118,13 +107,19 @@ public class ParkingLot {
             throw  new ParkingLotException("Null entered", ParkingLotException.ExceptionType.WRONG_DETAILS);
         if (carsParkingDetails.containsValue(registration))
             throw new ParkingLotException("Already Preset",ParkingLotException.ExceptionType.ALREADY_PARKED);
-        if (carsParkingDetails.size() > capacity)
+        if (carParked > capacity)
             throw new ParkingLotException("Parking Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
         carsParkingDetails.put(getPosition(),new SlotDetails(getPosition(), registration,LocalTime.now().withNano(0)));
         carParked++;
-        if (carsParkingDetails.size() == capacity){
+        if (carParked == capacity){
             observers.forEach(observer -> observer.parkingLotAvailable(true));
         }
+    }
+    public void unParkVehicle(String registration) {
+        if(carsParkingDetails.containsValue(registration)){
+            carsParkingDetails.put(getPosition(),null);
+        }
+        carParked --;
     }
 
     public int getPosition() {
@@ -142,7 +137,6 @@ public class ParkingLot {
                 .findFirst().get();
 
     }
-
 
     public boolean isVehiclePresent(String registration) {
         return carsParkingDetails.values().stream()

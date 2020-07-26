@@ -18,7 +18,7 @@ public class SlotDetails {
     }
 
     public LocalTime getTime() {
-        return time;
+        return time ;
     }
 
     public int getSlotNu() {

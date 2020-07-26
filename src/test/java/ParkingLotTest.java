@@ -120,24 +120,72 @@ public class ParkingLotTest {
         }
     }
 
+    // UC 9 Refactored uses ParkingLotSystem to park
     @Test
     public void givenVehicle_whenParkedinMultipleLots_ShouldBeParkedEvenly() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
         try {
-            parkingLotSystem.parkVehicle("CG11M0000");
-            parkingLotSystem.parkVehicle("CG11M0001");
-            String locationParkingForFirst = parkingLotSystem.location("CG11M0000");
-            String locationParkingForSecond = parkingLotSystem.location("CG11M0001");
-            String expectedForFirst = "1:1";
-            String expectedForSecond = "2:1";
-            Assert.assertEquals(expectedForFirst,locationParkingForFirst);
-            Assert.assertEquals(expectedForSecond,locationParkingForSecond);
-
+            parkingLotSystem.parkVehicle("CG11M0000",DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle("CG11M0001",DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle("CG11M0002",DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle("CG11M0003",DriverCategory.NORMAL);
+            String locationParkingForThird = parkingLotSystem.vehicleLocation("CG11M0002");
+            String expectedForThird ="lot 1 slot 2";
+            Assert.assertEquals(expectedForThird,locationParkingForThird);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
     }
 
+    @Test
+    public void givenParkedVehicleRegistration_WhenChecked_shouldReturnTrue() {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
+        try {
+            parkingLotSystem.parkVehicle("CG11M0000",DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle("CG11M0001",DriverCategory.NORMAL);
+            boolean isVehiclePresent = parkingLotSystem.isVehiclePresent("CG11M0001");
+            Assert.assertTrue(isVehiclePresent);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenUnavailableVehichleRegistration_WhenChecked_shouldReturnFalse() {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
+        try {
+            parkingLotSystem.parkVehicle("CG11M0000",DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle("CG11M0001",DriverCategory.NORMAL);
+            boolean isVehiclePresent = parkingLotSystem.isVehiclePresent("CG11M2231");
+            Assert.assertFalse(isVehiclePresent);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+    //UC 10 Handicap Driver
+
+    @Test
+    public void givenHandiCapDriver_whenParked_ShouldParkAtNearestSlot() throws ParkingLotException {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+        parkingLotSystem.parkVehicle("CG11M0000",DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle("CG11M0001",DriverCategory.HANDICAP);
+        parkingLotSystem.parkVehicle("CG11M0002",DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle("CG11M0003",DriverCategory.NORMAL);
+        String locationParkingForSecond = parkingLotSystem.vehicleLocation("CG11M0001");
+        String expected = "lot 1 slot 2";
+        Assert.assertEquals(expected,locationParkingForSecond);
+    }
+
+    @Test
+    public void givenSameVehicle_WhenParkedAgain_ShouldThrowException()  {
+        try {
+            ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+            parkingLotSystem.parkVehicle("CG11M0000",DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle("CG11M0000",DriverCategory.NORMAL);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.ALREADY_PARKED,e.type);
+        }
+    }
+
 
 }
-
