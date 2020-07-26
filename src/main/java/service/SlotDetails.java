@@ -1,17 +1,27 @@
 package service;
 
+import model.Car;
+
 import java.time.LocalTime;
 import java.util.Objects;
 
 public class SlotDetails {
     int slotNu;
-    String carRegistration;
     LocalTime time;
+    Car car;
 
-    public SlotDetails(int slotNu, String carRegistration, LocalTime time) {
+    public SlotDetails(int slotNu,  Car car, LocalTime time) {
         this.slotNu = slotNu;
-        this.carRegistration = carRegistration;
         this.time = time;
+        this.car =car;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
     }
 
     public SlotDetails() {
@@ -25,9 +35,6 @@ public class SlotDetails {
         return slotNu;
     }
 
-    public String getCarRegistration() {
-        return carRegistration;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -35,8 +42,8 @@ public class SlotDetails {
         if (o == null || getClass() != o.getClass()) return false;
         SlotDetails that = (SlotDetails) o;
         return slotNu == that.slotNu &&
-                Objects.equals(carRegistration, that.carRegistration) &&
-                Objects.equals(time, that.time);
+                Objects.equals(time, that.time) &&
+                Objects.equals(car, that.car);
     }
 
 }

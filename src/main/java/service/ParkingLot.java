@@ -43,8 +43,6 @@ public class ParkingLot {
     List<Map<String, Car>> parking = new ArrayList<>();
 
     public void parkWithDetails(Integer position ,String registration) throws  ParkingLotException {
-
-
         if( mapSlot.size() > capacity){
             for (IObserver observer: observers){
                 observer.parkingLotFull(true);
@@ -102,7 +100,9 @@ public class ParkingLot {
         throw new ParkingLotException("No such model exist", ParkingLotException.ExceptionType.WRONG_DETAILS);
     }
 
-    public void parkVehicle(String registration) throws  ParkingLotException{
+    /// for uc 9 onwards
+
+    public void parkVehicle(Car registration) throws  ParkingLotException{
         if(registration == null)
             throw  new ParkingLotException("Null entered", ParkingLotException.ExceptionType.WRONG_DETAILS);
         if (carsParkingDetails.containsValue(registration))
@@ -115,32 +115,25 @@ public class ParkingLot {
             observers.forEach(observer -> observer.parkingLotAvailable(true));
         }
     }
-    public void unParkVehicle(String registration) {
-        if(carsParkingDetails.containsValue(registration)){
-            carsParkingDetails.put(getPosition(),null);
-        }
-        carParked --;
-    }
-
     public int getPosition() {
         return this.carsParkingDetails.keySet()
-                .stream().filter(slotDetails -> carsParkingDetails.get(slotDetails).getCarRegistration()==null)
+                .stream().filter(slotDetails -> carsParkingDetails.get(slotDetails).getCar()==null)
                 .findFirst().orElse(0);
     }
 
-    public int vehicleLocation(String registration){
+    public int vehicleLocation(Car registration){
         return this.getSlotDetails(registration).getSlotNu();
     }
 
-    private SlotDetails getSlotDetails(String registration){
-        return this.carsParkingDetails.values().stream().filter(slot -> registration.equals(slot.carRegistration))
+    private SlotDetails getSlotDetails(Car registration){
+        return this.carsParkingDetails.values().stream().filter(slot -> registration.equals(slot.car))
                 .findFirst().get();
 
     }
 
-    public boolean isVehiclePresent(String registration) {
+    public boolean isVehiclePresent(Car registration) {
         return carsParkingDetails.values().stream()
-                .anyMatch(slotDetails -> slotDetails.getCarRegistration() == (registration));
+                .anyMatch(slotDetails -> slotDetails.getCar() == (registration));
     }
 
     public int getNumberOfParkedCars() {
