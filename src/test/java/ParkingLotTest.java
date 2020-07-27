@@ -111,8 +111,9 @@ public class ParkingLotTest {
     @Test
     public void givenCar_whenParked_ShouldReturnTime() {
         try {
+            ParkingLot parkingLot = new ParkingLot(1);
             int slotPositionToPark = parkingLot.getSlotPositionToPark(1);
-            parkingLot.parkWithDetails(1,"CG04Z0592");
+            parkingLot.parkWithDetails(slotPositionToPark,"CG04Z0592");
             LocalTime parkedTime = parkingLot.getParkingTime("CG04Z0592");
             LocalTime current = LocalTime.now().withNano(0);
             Assert.assertEquals(current, parkedTime);
@@ -172,7 +173,7 @@ public class ParkingLotTest {
         }
     }
 
-//    //UC 10 Handicap Driver
+    //UC 10 Handicap Driver
 
     @Test
     public void givenHandiCapDriver_whenParked_ShouldParkAtNearestSlot() {
@@ -253,17 +254,19 @@ public class ParkingLotTest {
         try{
             ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
             Car firstCar = new Car("CG11M7393","SMALL","RED");
-            Car secondCar = new Car("CG04Z1994","SMALL","BLUE");
-            Car thirdCar = new Car("CG012K1964", "SMALL","WHITE");
+            Car secondCar = new Car("CG04Z1994","SMALL","WHITE");
+            Car thirdCar = new Car("CG012K1964", "SMALL","BLACK");
             Car fourthCar = new Car("KA01B2030","SMALL","WHITE");
             parkingLotSystem.parkVehicle(firstCar,DriverCategory.NORMAL);
             parkingLotSystem.parkVehicle(secondCar,DriverCategory.NORMAL);
             parkingLotSystem.parkVehicle(thirdCar,DriverCategory.NORMAL);
             parkingLotSystem.parkVehicle(fourthCar,DriverCategory.NORMAL);
-            List white = parkingLotSystem.getCarByColor("WHITE");
-            System.out.println(white.toString());
+            List<String> white = parkingLotSystem.findWhiteVehiclePosition("WHITE");
+            String expected = white.get(1);
+            Assert.assertEquals(expected,white.get(1));
         }catch (ParkingLotException e){
 
         }
     }
+
 }

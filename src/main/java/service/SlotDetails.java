@@ -28,7 +28,8 @@ public class SlotDetails {
     }
 
     public LocalTime getTime() {
-        return time ;
+        return time.withNano(0);
+
     }
 
     public int getSlotNu() {

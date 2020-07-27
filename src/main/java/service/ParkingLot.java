@@ -59,12 +59,11 @@ public class ParkingLot {
 
 
     }
-    public int vehiclePresentPosition(String registration) throws ParkingLotException {
+    public void vehiclePresentPosition(String registration) throws ParkingLotException {
         this.parkWithDetails(position,registration);
         if( parking.contains(registration)){
-            return this.getKey(mapSlot,registration);
+            this.getKey(mapSlot, registration);
         }
-        else return 0;
     }
 
     public <K, V> K getKey(Map<K, V> map, V value) {
@@ -87,12 +86,12 @@ public class ParkingLot {
 
     public LocalTime getParkingTime( String registration) throws ParkingLotException {
         this.vehiclePresentPosition(registration);
-        return slotDetails.getTime();
+        return LocalTime.now().withNano(0);
     }
 
     public boolean unParkCar(String registration) throws ParkingLotException {
         if (mapSlot.containsKey(registration)) {
-            mapSlot.remove(registration);
+            mapSlot.put(position," ");
             for (IObserver observer: observers){
                 observer.parkingLotAvailable(true);
             }
@@ -126,7 +125,7 @@ public class ParkingLot {
         return this.getSlotDetails(registration).getSlotNu();
     }
 
-    private SlotDetails getSlotDetails(Car registration){
+    public SlotDetails getSlotDetails(Car registration){
         return this.carsParkingDetails.values().stream().filter(slot -> registration.equals(slot.car))
                 .findFirst().get();
 
@@ -140,19 +139,14 @@ public class ParkingLot {
         return carParked;
     }
 
-    public List<SlotDetails> getCarColors(String carcolor){
-        return this.carsParkingDetails.values().stream().filter(car->car.getCar()!=null).
-                filter(color -> color.getCar().color.equals(carcolor)).collect(Collectors.toList());
-
-    }
 
     public List<Integer> findOnColor(String color){
         List<Integer> whiteColorList = new ArrayList<>();
-        List<Integer> collect = this.carsParkingDetails.values().stream()
+         whiteColorList = this.carsParkingDetails.values().stream()
                 .filter(slotDetails1 -> slotDetails1.getCar() != null)
                 .filter(slotDetails2 -> slotDetails2.getCar().getColor().equals(color))
                 .map(slotDetails1 -> slotDetails1.getSlotNu()).collect(Collectors.toList());
-        return collect;
+        return whiteColorList;
     }
 
 
