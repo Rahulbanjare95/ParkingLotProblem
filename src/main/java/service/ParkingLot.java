@@ -44,7 +44,7 @@ public class ParkingLot {
     List<Map<String, Car>> parking = new ArrayList<>();
 
     public void parkWithDetails(Integer position ,String registration) throws  ParkingLotException {
-        if( mapSlot.size() > capacity){
+        if( mapSlot.size() == capacity){
             for (IObserver observer: observers){
                 observer.parkingLotFull(true);
             }throw new ParkingLotException("Parking Full",
