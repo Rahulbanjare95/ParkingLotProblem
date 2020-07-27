@@ -6,6 +6,7 @@ import observer.IObserver;
 
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -104,14 +105,15 @@ public class ParkingLot {
         throw new ParkingLotException("No such model exist", ParkingLotException.ExceptionType.WRONG_DETAILS);
     }
 
-    public void parkVehicle(Car registration) throws  ParkingLotException{
+    public void parkVehicle(Car registration,String attendant) throws  ParkingLotException{
         if(registration == null)
             throw  new ParkingLotException("Null entered", ParkingLotException.ExceptionType.WRONG_DETAILS);
         if (carsParkingDetails.containsValue(registration))
             throw new ParkingLotException("Already Preset",ParkingLotException.ExceptionType.ALREADY_PARKED);
         if (carParked > capacity)
             throw new ParkingLotException("Parking Full", ParkingLotException.ExceptionType.PARKING_LOT_FULL);
-        carsParkingDetails.put(getPosition(),new SlotDetails(getPosition(), registration,LocalTime.now().withNano(0)));
+        carsParkingDetails.put(getPosition(),new SlotDetails(getPosition(), registration,
+                LocalTime.now().withNano(0),attendant));
         carParked++;
         if (carParked == capacity){
             observers.forEach(observer -> observer.parkingLotAvailable(true));
@@ -158,4 +160,26 @@ public class ParkingLot {
         }
         return colorslot;
     }
+
+    public List<String> findbyColorAndCompany(String color, String brand){
+        List<String> attendants = new ArrayList<>() ;
+//        for (Integer slot : carsParkingDetails.keySet()){
+//            if ( carsParkingDetails.get(slot).getCar().getColor().equals(color)
+//                    && carsParkingDetails.get(slot).getCar().getBrand().equals(brand)){
+//                attendants.add(carsParkingDetails.get(slot).getCar().getRegistration()+" "+
+//                        carsParkingDetails.get(slot).getAttendantName());
+//            }
+//        }
+        for (Integer slot : carsParkingDetails.keySet()){
+            if (carsParkingDetails.get(slot).getCar().getColor().equals(color) && carsParkingDetails.get(slot).getCar().getBrand().equals(brand))
+                attendants.add(slot +" "+carsParkingDetails.get(slot).getCar().getRegistration()+" "+carsParkingDetails.get(slot).getAttendantName());
+        }
+        return attendants;
+
+    }
+
+    
+
+
+
 }

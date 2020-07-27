@@ -21,7 +21,7 @@ public class ParkingLotSystem<whiteVehicleDetails> {
         IntStream.range(0, parkingLot).forEachOrdered(lot -> parkingLotList.add(new ParkingLot(parkingSlotInLot)));
     }
 
-    public void parkVehicle(Car carDetails, DriverCategory type) throws ParkingLotException {
+    public void parkVehicle(Car carDetails, DriverCategory type, String attendant) throws ParkingLotException {
 
         for (ParkingLot lot : parkingLotList) {
             boolean isVehiclePresent = lot.isVehiclePresent(carDetails);
@@ -35,20 +35,20 @@ public class ParkingLotSystem<whiteVehicleDetails> {
                         .getNumberOfParkedCars() != parkingSlotInLot)
                         .findFirst().ifPresent(lot -> {
                     try {
-                        parkingLotList.get(lot).parkVehicle(carDetails);
+                        parkingLotList.get(lot).parkVehicle(carDetails,attendant);
                     } catch (ParkingLotException e) {
                         e.printStackTrace();
                     }
                 });
             if (carDetails.getSize().equals("LARGE")){
                 ParkingLot lots = getPositionOnLot();
-                lots.parkVehicle(carDetails);
+                lots.parkVehicle(carDetails,attendant);
 
             }
         }
         if (type.equals(DriverCategory.NORMAL)) {
             ParkingLot lots = getPositionOnLot();
-            lots.parkVehicle(carDetails);
+            lots.parkVehicle(carDetails,attendant);
         }
     }
 
@@ -93,6 +93,19 @@ public class ParkingLotSystem<whiteVehicleDetails> {
 //            throw  new ParkingLotException("No such color",ParkingLotException.ExceptionType.NO_SUCH_COLOR);
 //        }
         return whiteVehicleDetails;
+    }
+
+    public List<String> findCarByBrandsAndColor(String color, String brand) throws ParkingLotException {
+        List<String> listofCarsColorAttendants = new ArrayList<>();
+        int lot = 0;
+        for (ParkingLot parkingLot : parkingLotList){
+            List<String> attendants = parkingLot.findbyColorAndCompany(color, brand);
+            lot++;
+            listofCarsColorAttendants.add("lot "+lot+" slot "+attendants);
+         }
+        if (listofCarsColorAttendants.size() == 0)
+            throw new ParkingLotException("No such color",ParkingLotException.ExceptionType.NO_SUCH_COLOR);
+        return listofCarsColorAttendants;
     }
 
 

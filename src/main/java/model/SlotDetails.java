@@ -7,11 +7,13 @@ public class SlotDetails {
     int slotNu;
     LocalTime time;
     Car car;
+    String attendantName;
 
-    public SlotDetails(int slotNu,  Car car, LocalTime time) {
+    public SlotDetails(int slotNu,  Car car, LocalTime time, String attendantName) {
         this.slotNu = slotNu;
         this.time = time;
         this.car = car;
+        this.attendantName = attendantName;
     }
 
     public Car getCar() {
@@ -34,6 +36,9 @@ public class SlotDetails {
         return slotNu;
     }
 
+    public String getAttendantName() {
+        return attendantName;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -42,7 +47,8 @@ public class SlotDetails {
         SlotDetails that = (SlotDetails) o;
         return slotNu == that.slotNu &&
                 Objects.equals(time, that.time) &&
-                Objects.equals(car, that.car);
+                Objects.equals(car, that.car) &&
+                Objects.equals(attendantName, that.attendantName);
     }
 
 }
