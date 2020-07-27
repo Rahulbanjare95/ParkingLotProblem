@@ -9,7 +9,7 @@ public class SlotDetails {
     Car car;
     String attendantName;
 
-    public SlotDetails(int slotNu,  Car car, LocalTime time, String attendantName) {
+    public SlotDetails(int slotNu, Car car, LocalTime time, String attendantName) {
         this.slotNu = slotNu;
         this.time = time;
         this.car = car;

@@ -9,19 +9,20 @@ public class Car {
     public String color;
     public String size;
     public String brand;
+
     public Car() {
     }
 
     public Car(String registration, String color, String size) {
         this.registration = registration;
-        this.color =color;
-        this.size =size;
+        this.color = color;
+        this.size = size;
 
     }
 
     public Car(String registration, String color, String size, String brand) {
         this.registration = registration;
-        this.color =color;
+        this.color = color;
         this.size = size;
         this.brand = brand;
     }
