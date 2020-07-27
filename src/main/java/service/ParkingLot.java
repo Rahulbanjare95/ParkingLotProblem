@@ -163,13 +163,6 @@ public class ParkingLot {
 
     public List<String> findbyColorAndCompany(String color, String brand){
         List<String> attendants = new ArrayList<>() ;
-//        for (Integer slot : carsParkingDetails.keySet()){
-//            if ( carsParkingDetails.get(slot).getCar().getColor().equals(color)
-//                    && carsParkingDetails.get(slot).getCar().getBrand().equals(brand)){
-//                attendants.add(carsParkingDetails.get(slot).getCar().getRegistration()+" "+
-//                        carsParkingDetails.get(slot).getAttendantName());
-//            }
-//        }
         for (Integer slot : carsParkingDetails.keySet()){
             if (carsParkingDetails.get(slot).getCar().getColor().equals(color) && carsParkingDetails.get(slot).getCar().getBrand().equals(brand))
                 attendants.add(slot +" "+carsParkingDetails.get(slot).getCar().getRegistration()+" "+carsParkingDetails.get(slot).getAttendantName());
@@ -178,8 +171,14 @@ public class ParkingLot {
 
     }
 
-    
 
-
-
+    public List<Integer> findCarsByBrand(String brand) {
+        List<Integer> bmwlot = new ArrayList<>();
+        for (Integer slot : carsParkingDetails.keySet()){
+            if (carsParkingDetails.get(slot).getCar().getBrand().equals(brand)){
+                bmwlot.add(slot);
+            }
+        }
+        return bmwlot;
+    }
 }

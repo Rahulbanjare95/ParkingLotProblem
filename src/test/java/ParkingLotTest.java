@@ -196,7 +196,7 @@ public class ParkingLotTest {
         }
     }
     @Test
-    public void givenNormalDriver_whenParked_ShouldParkEvenly() throws ParkingLotException {
+    public void givenNormalDriver_whenParked_ShouldParkEvenly()  {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
         Car first = new Car("CG11M0000","BLUE","SMALL","TOYOTA");
         Car second = new Car("CG11M001","BLUE","SMALL","TOYOTA");
@@ -216,7 +216,7 @@ public class ParkingLotTest {
     }
 //
     @Test
-    public void givenLargeCars_whenParked_ShouldParkAtMostFreeSpace() throws ParkingLotException {
+    public void givenLargeCars_whenParked_ShouldParkAtMostFreeSpace()  {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
         Car first = new Car("CG11M0000","BLUE","SMALL","TOYOTA");
         Car second = new Car("CG11M001","BLUE","LARGE","TOYOTA");
@@ -236,7 +236,7 @@ public class ParkingLotTest {
     }
 //
     @Test
-    public void givenParkingLotList_whenFilteredBasedOnWhiteColour_ShouldReturnWhiteCars() throws ParkingLotException {
+    public void givenParkingLotList_whenFilteredBasedOnWhiteColour_ShouldReturnWhiteCars() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
         Car first = new Car("CG11M0000","BLUE","SMALL","TOYOTA");
         Car second = new Car("CG11M001","BLUE","LARGE","TOYOTA");
@@ -276,6 +276,44 @@ public class ParkingLotTest {
             e.printStackTrace();
         }
     }
-    
+
+    @Test
+    public void givenMultipleCarsParked_whenSearchedForBMWcars_ShouldReturnBMWPosition() {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+        Car first = new Car("CG11M0000","BLUE","SMALL","MARUTI");
+        Car second = new Car("CG11M001","GREEN","SMALL","TOYOTA");
+        Car third = new Car("CG11M0002","SILVER","SMALL","FORD");
+        Car fourth = new Car("CG11M0003","BLUE","SMALL","BMW");
+        try {
+            parkingLotSystem.parkVehicle(first,DriverCategory.NORMAL,"ABC");
+            parkingLotSystem.parkVehicle(second,DriverCategory.NORMAL,"XYZ");
+            parkingLotSystem.parkVehicle(third,DriverCategory.NORMAL,"ABC");
+            parkingLotSystem.parkVehicle(fourth,DriverCategory.NORMAL,"XYZ");
+            List<String> list = parkingLotSystem.findBMWCars("BMW");
+            List<String> expected = Arrays.asList("lot 1 slot []", "lot 2 slot [2]");
+            Assert.assertEquals(expected,list);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+
+    }
+    @Test
+    public void givenMultipleCarsButNoBMW_whenSearchedForBMWcars_ShouldThrowException() {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+        Car first = new Car("CG11M0000","BLUE","SMALL","MARUTI");
+        Car second = new Car("CG11M001","GREEN","SMALL","TOYOTA");
+        Car third = new Car("CG11M0002","SILVER","SMALL","FORD");
+        Car fourth = new Car("CG11M0003","BLUE","SMALL","KIA");
+        try {
+            parkingLotSystem.parkVehicle(first,DriverCategory.NORMAL,"ABC");
+            parkingLotSystem.parkVehicle(second,DriverCategory.NORMAL,"XYZ");
+            parkingLotSystem.parkVehicle(third,DriverCategory.NORMAL,"ABC");
+            parkingLotSystem.parkVehicle(fourth,DriverCategory.NORMAL,"XYZ");
+            List bmw = parkingLotSystem.findBMWCars("BMW");
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.NO_SUCH_BRAND,e.type);
+        }
+    }
+
 
 }

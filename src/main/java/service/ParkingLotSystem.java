@@ -109,4 +109,17 @@ public class ParkingLotSystem<whiteVehicleDetails> {
     }
 
 
+    public List<String> findBMWCars(String brand) throws ParkingLotException {
+        List<String> lisofBMWCars = new ArrayList<>();
+        int lot =0;
+        for (ParkingLot parkingLot: parkingLotList){
+            List<Integer> bmwSlots = parkingLot.findCarsByBrand(brand);
+            lot++;
+            lisofBMWCars.add("lot " + lot + " slot " + bmwSlots);
+        }
+        if (lisofBMWCars.size()==0){
+            throw  new ParkingLotException("No such brand Parked",ParkingLotException.ExceptionType.NO_SUCH_BRAND);
+        }
+        return lisofBMWCars;
+    }
 }
