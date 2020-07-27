@@ -1,50 +1,37 @@
 package model;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class Car {
 
     public String registration;
-    public String size;
     public String color;
-
+    public String size;
     public Car() {
     }
-    public Car(String registration, String size){
+
+    public Car(String registration, String color, String size) {
         this.registration = registration;
+        this.color =color;
         this.size =size;
-    }
-
-    public Car(String registration, String size, String color) {
-        this.registration = registration;
-        this.size = size;
-        this.color = color;
-    }
-
-    public Car(String registration) {
-        this.registration = registration;
 
     }
 
-    public String getSize() {
-        return size;
+    public String getColor() {
+
+        return color;
     }
 
     public String getRegistration() {
         return registration;
     }
 
-    public String getColor() {
-        return color;
+    public void setRegistration(String registration) {
+        this.registration = registration;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Car car = (Car) o;
-        return Objects.equals(registration, car.registration) &&
-                Objects.equals(size, car.size);
+    public String getSize() {
+        return size;
     }
+
 }

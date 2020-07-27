@@ -1,12 +1,13 @@
 package service;
 import exception.ParkingLotException;
 import model.Car;
+import model.SlotDetails;
 import observer.IObserver;
 
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 
 public class ParkingLot {
 
@@ -44,7 +45,9 @@ public class ParkingLot {
     List<Map<String, Car>> parking = new ArrayList<>();
 
     public void parkWithDetails(Integer position ,String registration) throws  ParkingLotException {
-        if( mapSlot.size() == capacity){
+
+
+        if( mapSlot.size() > capacity){
             for (IObserver observer: observers){
                 observer.parkingLotFull(true);
             }throw new ParkingLotException("Parking Full",
@@ -59,11 +62,12 @@ public class ParkingLot {
 
 
     }
-    public void vehiclePresentPosition(String registration) throws ParkingLotException {
+    public int vehiclePresentPosition(String registration) throws ParkingLotException {
         this.parkWithDetails(position,registration);
         if( parking.contains(registration)){
-            this.getKey(mapSlot, registration);
+            return this.getKey(mapSlot,registration);
         }
+        else return 0;
     }
 
     public <K, V> K getKey(Map<K, V> map, V value) {
@@ -86,12 +90,12 @@ public class ParkingLot {
 
     public LocalTime getParkingTime( String registration) throws ParkingLotException {
         this.vehiclePresentPosition(registration);
-        return LocalTime.now().withNano(0);
+        return slotDetails.getTime();
     }
 
     public boolean unParkCar(String registration) throws ParkingLotException {
         if (mapSlot.containsKey(registration)) {
-            mapSlot.put(position," ");
+            mapSlot.remove(registration);
             for (IObserver observer: observers){
                 observer.parkingLotAvailable(true);
             }
@@ -99,8 +103,6 @@ public class ParkingLot {
         }
         throw new ParkingLotException("No such model exist", ParkingLotException.ExceptionType.WRONG_DETAILS);
     }
-
-    /// for uc 9 onwards
 
     public void parkVehicle(Car registration) throws  ParkingLotException{
         if(registration == null)
@@ -115,6 +117,13 @@ public class ParkingLot {
             observers.forEach(observer -> observer.parkingLotAvailable(true));
         }
     }
+    public void unParkVehicle(Car registration) {
+        if(carsParkingDetails.containsValue(registration)){
+            carsParkingDetails.put(getPosition(),null);
+        }
+        carParked --;
+    }
+
     public int getPosition() {
         return this.carsParkingDetails.keySet()
                 .stream().filter(slotDetails -> carsParkingDetails.get(slotDetails).getCar()==null)
@@ -125,8 +134,8 @@ public class ParkingLot {
         return this.getSlotDetails(registration).getSlotNu();
     }
 
-    public SlotDetails getSlotDetails(Car registration){
-        return this.carsParkingDetails.values().stream().filter(slot -> registration.equals(slot.car))
+    private SlotDetails getSlotDetails(Car registration){
+        return this.carsParkingDetails.values().stream().filter(slot -> registration.equals(slot.getCar()))
                 .findFirst().get();
 
     }
@@ -135,20 +144,18 @@ public class ParkingLot {
         return carsParkingDetails.values().stream()
                 .anyMatch(slotDetails -> slotDetails.getCar() == (registration));
     }
+
     public int getNumberOfParkedCars() {
         return carParked;
     }
 
-
-    public List<Integer> findOnColor(String color){
-        List<Integer> whiteColorList = new ArrayList<>();
-         whiteColorList = this.carsParkingDetails.values().stream()
-                .filter(slotDetails1 -> slotDetails1.getCar() != null)
-                .filter(slotDetails2 -> slotDetails2.getCar().getColor().equals(color))
-                .map(slotDetails1 -> slotDetails1.getSlotNu()).collect(Collectors.toList());
-        return whiteColorList;
+    public List<Integer> findOnColor(String color) {
+        List<Integer> colorslot = new ArrayList<>();
+        for (Integer slot : carsParkingDetails.keySet()){
+            if (carsParkingDetails.get(slot).getCar().getColor().equals(color)){
+                colorslot.add(slot);
+            }
+        }
+        return colorslot;
     }
-
-
-
 }

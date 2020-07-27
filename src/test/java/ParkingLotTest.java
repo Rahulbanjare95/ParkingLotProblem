@@ -1,3 +1,4 @@
+import enums.DriverCategory;
 import exception.ParkingLotException;
 import model.Car;
 import observer.AirportSecurity;
@@ -7,7 +8,7 @@ import org.junit.Test;
 import service.*;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ParkingLotTest {
@@ -111,12 +112,12 @@ public class ParkingLotTest {
     @Test
     public void givenCar_whenParked_ShouldReturnTime() {
         try {
-            ParkingLot parkingLot = new ParkingLot(1);
             int slotPositionToPark = parkingLot.getSlotPositionToPark(1);
-            parkingLot.parkWithDetails(slotPositionToPark,"CG04Z0592");
-            LocalTime parkedTime = parkingLot.getParkingTime("CG04Z0592");
+            parkingLot.parkWithDetails(slotPositionToPark,"CG04Z1122");
+            LocalTime parkedTime = parkingLot.getParkingTime("CG04Z1122");
             LocalTime current = LocalTime.now().withNano(0);
             Assert.assertEquals(current, parkedTime);
+
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
@@ -126,18 +127,19 @@ public class ParkingLotTest {
     @Test
     public void givenVehicle_whenParkedinMultipleLots_ShouldBeParkedEvenly() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
+        Car first = new Car("CG11M0000","BLACK","SMALL");
+        Car second = new Car("CG11M001","BLACK","SMALL");
+        Car third = new Car("CG11M0002","BLACK","SMALL");
+        Car fourth = new Car("CG11M0003","BLACK","SMALL");
         try {
-            Car firstCar = new Car("CG11M7393","SMALL");
-            Car secondCar = new Car("CG04Z1994","SMALL");
-            Car thirdCar = new Car("CG012K1964", "SMALL");
-            Car fourthCar = new Car("KA01B2030","SMALL");
-            parkingLotSystem.parkVehicle(firstCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(secondCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(thirdCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(fourthCar,DriverCategory.NORMAL);
-            String parkedPositionSecondCar = parkingLotSystem.vehicleLocation(secondCar);
-            String expectedPosition = "lot 2 slot 1";
-            Assert.assertEquals(expectedPosition, parkedPositionSecondCar);
+
+            parkingLotSystem.parkVehicle(first, DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(second,DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(third,DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(fourth,DriverCategory.NORMAL);
+            String locationParkingForThird = parkingLotSystem.vehicleLocation(third);
+            String expectedForThird ="lot 1 slot 2";
+            Assert.assertEquals(expectedForThird,locationParkingForThird);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
@@ -147,126 +149,113 @@ public class ParkingLotTest {
     public void givenParkedVehicleRegistration_WhenChecked_shouldReturnTrue() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
         try {
-            Car firstCar = new Car("CG11M0000","SMALL");
-            Car secondCar = new Car("CG11M0001","SMALL");
-            parkingLotSystem.parkVehicle(firstCar, DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(secondCar, DriverCategory.NORMAL);
-            boolean isVehiclePresent = parkingLotSystem.isVehiclePresent(firstCar);
+            Car first = new Car("CG11M0000","BLACK","SMALL");
+            Car second = new Car("CG11M001","BLACK","SMALL");
+            parkingLotSystem.parkVehicle(first,DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(second,DriverCategory.NORMAL);
+            boolean isVehiclePresent = parkingLotSystem.isVehiclePresent(first);
             Assert.assertTrue(isVehiclePresent);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
     }
+
     @Test
-    public void givenUnavailableRegistration_WhenChecked_shouldReturnFalse() {
+    public void givenUnavailableVehichleRegistration_WhenChecked_shouldReturnFalse() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
         try {
-            Car firstCar = new Car("CG11M0000","SMALL");
-            Car secondCar = new Car("CG11M0001","SMALL");
-            Car invalidCar = new Car("CG11M0021","SMALL");
-            parkingLotSystem.parkVehicle(firstCar, DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(secondCar, DriverCategory.NORMAL);
-            boolean isVehiclePresent = parkingLotSystem.isVehiclePresent(invalidCar);
+            Car first = new Car("CG11M0000","BLACK","SMALL");
+            Car second = new Car("CG11M001","BLACK","SMALL");
+            Car third = new Car("CG11M789","BLACK","SMALL");
+            parkingLotSystem.parkVehicle(first,DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(second,DriverCategory.NORMAL);
+            boolean isVehiclePresent = parkingLotSystem.isVehiclePresent(third);
             Assert.assertFalse(isVehiclePresent);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
     }
-
     //UC 10 Handicap Driver
 
     @Test
-    public void givenHandiCapDriver_whenParked_ShouldParkAtNearestSlot() {
+    public void givenHandiCapDriver_whenParked_ShouldParkAtNearestSlot() throws ParkingLotException {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+        Car first = new Car("CG11M0000","BLACK","SMALL");
+        Car second = new Car("CG11M001","BLACK","SMALL");
+        Car third = new Car("CG11M0002","BLACK","SMALL");
+        Car fourth = new Car("CG11M0003","BLACK","SMALL");
+        parkingLotSystem.parkVehicle(first,DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle(second,DriverCategory.HANDICAP);
+        parkingLotSystem.parkVehicle(third,DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle(fourth,DriverCategory.NORMAL);
+        String locationParkingForSecond = parkingLotSystem.vehicleLocation(second);
+        String expected = "lot 1 slot 2";
+        Assert.assertEquals(expected,locationParkingForSecond);
+    }
+    @Test
+    public void givenNormalDriver_whenParked_ShouldParkEvenly() throws ParkingLotException {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+        Car first = new Car("CG11M0000","BLACK","SMALL");
+        Car second = new Car("CG11M001","BLACK","SMALL");
+        Car third = new Car("CG11M0002","BLACK","SMALL");
+        Car fourth = new Car("CG11M0003","BLACK","SMALL");
+        parkingLotSystem.parkVehicle(first,DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle(second,DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle(third,DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle(fourth,DriverCategory.NORMAL);
+        String locationParkingForSecond = parkingLotSystem.vehicleLocation(second);
+        String expected = "lot 2 slot 1";
+        Assert.assertEquals(expected,locationParkingForSecond);
+    }
+
+    @Test
+    public void givenLargeCars_whenParked_ShouldParkAtMostFreeSpace() throws ParkingLotException {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+        Car first = new Car("CG11M0000","BLACK","SMALL");
+        Car second = new Car("CG11M001","BLACK","LARGE");
+        Car third = new Car("CG11M0002","BLACK","SMALL");
+        Car fourth = new Car("CG11M0003","BLACK","SMALL");
+        parkingLotSystem.parkVehicle(first,DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle(second,DriverCategory.HANDICAP);
+        parkingLotSystem.parkVehicle(third,DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle(fourth,DriverCategory.NORMAL);
+        String locationParkingForSecond = parkingLotSystem.vehicleLocation(second);
+        String expected = "lot 2 slot 1";
+        Assert.assertEquals(expected,locationParkingForSecond);
+    }
+
+    @Test
+    public void givenParkingLotList_whenFilteredBasedOnWhiteColour_ShouldReturnWhiteCars() throws ParkingLotException {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+        Car first = new Car("CG11M0000","WHITE","SMALL");
+        Car second = new Car("CG11M001","WHITE","LARGE");
+        Car third = new Car("CG11M0002","BLACK","SMALL");
+        Car fourth = new Car("CG11M0003","WHITE","SMALL");
+        parkingLotSystem.parkVehicle(first,DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle(second,DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle(third,DriverCategory.NORMAL);
+        parkingLotSystem.parkVehicle(fourth,DriverCategory.NORMAL);
+        List colorlist = parkingLotSystem.findWhiteVehiclePosition("WHITE");
+        List expected = Arrays.asList("lot 1 slot [1]","lot 2 slot [1, 2]");
+        Assert.assertEquals(expected,colorlist);
+    }
+    @Test
+    public void givenParkingLotListFilteredOnWhiteColor_whenNoWhiteColorsPresent_ShouldThrowException(){
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+        Car first = new Car("CG11M0000","GREEN","SMALL");
+        Car second = new Car("CG11M001","BLUE","LARGE");
+        Car third = new Car("CG11M0002","BLACK","SMALL");
+        Car fourth = new Car("CG11M0003","BLUE","SMALL");
         try {
-            ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
-            Car firstCar = new Car("CG11M7393","SMALL");
-            Car secondCar = new Car("CG04Z1994","SMALL");
-            Car thirdCar = new Car("CG012K1964", "SMALL");
-            Car fourthCar = new Car("KA01B2030","SMALL");
-            parkingLotSystem.parkVehicle(firstCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(secondCar,DriverCategory.HANDICAP);
-            parkingLotSystem.parkVehicle(thirdCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(fourthCar,DriverCategory.NORMAL);
-            String parkedPosition = parkingLotSystem.vehicleLocation(secondCar);
-            String expectedPosition = "lot 1 slot 2";
-            Assert.assertEquals(expectedPosition,parkedPosition);
+            parkingLotSystem.parkVehicle(first,DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(second,DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(third,DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(fourth,DriverCategory.NORMAL);
         } catch (ParkingLotException e) {
-            e.printStackTrace();
+            Assert.assertEquals(ParkingLotException.ExceptionType.NO_SUCH_COLOR, e.type);
         }
     }
 
-    @Test
-    public void givenSameVehicle_WhenParkedAgain_ShouldThrowException()  {
-        try {
-            Car firstCar = new Car("CG11M0000","SMALL");
-            Car secondCar = new Car("CG11M0000","SMALL");
-            ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
-            parkingLotSystem.parkVehicle(firstCar, DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(secondCar,DriverCategory.NORMAL);
-        } catch (ParkingLotException e) {
-            Assert.assertEquals(ParkingLotException.ExceptionType.ALREADY_PARKED,e.type);
-        }
-    }
 
-    //UC11
-
-    @Test
-    public void givenLargeCarToBeParkedByHandicap_WhenParked_ShouldBeParkedAtMostFreeSlot() {
-        try {
-            ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
-            Car firstCar = new Car("CG11M7393","SMALL");
-            Car secondCar = new Car("CG04Z1994","LARGE");
-            Car thirdCar = new Car("CG012K1964", "SMALL");
-            Car fourthCar = new Car("KA01B2030","SMALL");
-            parkingLotSystem.parkVehicle(firstCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(secondCar,DriverCategory.HANDICAP);
-            parkingLotSystem.parkVehicle(thirdCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(fourthCar,DriverCategory.NORMAL);
-            String parkedPosition = parkingLotSystem.vehicleLocation(secondCar);
-            String expectedPosition = "lot 2 slot 1";
-            Assert.assertEquals(expectedPosition,parkedPosition);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @Test
-    public void givenSmallCarToBeParkedByHandicap_WhenParked_ShouldBeParkedAtNearestSlot() {
-        try {
-            ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
-            Car firstCar = new Car("CG11M7393","SMALL");
-            Car secondCar = new Car("CG04Z1994","SMALL");
-            Car thirdCar = new Car("CG012K1964", "SMALL");
-            Car fourthCar = new Car("KA01B2030","SMALL");
-            parkingLotSystem.parkVehicle(firstCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(secondCar,DriverCategory.HANDICAP);
-            parkingLotSystem.parkVehicle(thirdCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(fourthCar,DriverCategory.NORMAL);
-            String parkedPosition = parkingLotSystem.vehicleLocation(secondCar);
-            String expectedPosition = "lot 1 slot 2";
-            Assert.assertEquals(expectedPosition,parkedPosition);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void givenMultipleVehiclesToPark_WhenSearchedForWhiteColor_ShouldReturnWhiteCarLocations() {
-        try{
-            ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
-            Car firstCar = new Car("CG11M7393","SMALL","RED");
-            Car secondCar = new Car("CG04Z1994","SMALL","WHITE");
-            Car thirdCar = new Car("CG012K1964", "SMALL","BLACK");
-            Car fourthCar = new Car("KA01B2030","SMALL","WHITE");
-            parkingLotSystem.parkVehicle(firstCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(secondCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(thirdCar,DriverCategory.NORMAL);
-            parkingLotSystem.parkVehicle(fourthCar,DriverCategory.NORMAL);
-            List<String> white = parkingLotSystem.findWhiteVehiclePosition("WHITE");
-            String expected = white.get(1);
-            Assert.assertEquals(expected,white.get(1));
-        }catch (ParkingLotException e){
-
-        }
-    }
 
 }

@@ -1,6 +1,4 @@
-package service;
-
-import model.Car;
+package model;
 
 import java.time.LocalTime;
 import java.util.Objects;
