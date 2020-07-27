@@ -5,6 +5,7 @@ import observer.IObserver;
 
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ParkingLot {
@@ -135,9 +136,25 @@ public class ParkingLot {
         return carsParkingDetails.values().stream()
                 .anyMatch(slotDetails -> slotDetails.getCar() == (registration));
     }
-
     public int getNumberOfParkedCars() {
         return carParked;
     }
+
+    public List<SlotDetails> getCarColors(String carcolor){
+        return this.carsParkingDetails.values().stream().filter(car->car.getCar()!=null).
+                filter(color -> color.getCar().color.equals(carcolor)).collect(Collectors.toList());
+
+    }
+
+    public List<Integer> findOnColor(String color){
+        List<Integer> whiteColorList = new ArrayList<>();
+        List<Integer> collect = this.carsParkingDetails.values().stream()
+                .filter(slotDetails1 -> slotDetails1.getCar() != null)
+                .filter(slotDetails2 -> slotDetails2.getCar().getColor().equals(color))
+                .map(slotDetails1 -> slotDetails1.getSlotNu()).collect(Collectors.toList());
+        return collect;
+    }
+
+
 
 }

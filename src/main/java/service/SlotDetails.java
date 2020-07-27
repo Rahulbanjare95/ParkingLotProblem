@@ -13,7 +13,7 @@ public class SlotDetails {
     public SlotDetails(int slotNu,  Car car, LocalTime time) {
         this.slotNu = slotNu;
         this.time = time;
-        this.car =car;
+        this.car = car;
     }
 
     public Car getCar() {

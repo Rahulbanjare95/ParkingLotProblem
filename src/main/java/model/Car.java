@@ -7,13 +7,19 @@ public class Car {
 
     public String registration;
     public String size;
-
+    public String color;
 
     public Car() {
     }
     public Car(String registration, String size){
         this.registration = registration;
         this.size =size;
+    }
+
+    public Car(String registration, String size, String color) {
+        this.registration = registration;
+        this.size = size;
+        this.color = color;
     }
 
     public Car(String registration) {
@@ -29,8 +35,8 @@ public class Car {
         return registration;
     }
 
-    public void setRegistration(String registration) {
-        this.registration = registration;
+    public String getColor() {
+        return color;
     }
 
     @Override

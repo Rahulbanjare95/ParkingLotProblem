@@ -7,6 +7,8 @@ import org.junit.Test;
 import service.*;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParkingLotTest {
 
@@ -243,6 +245,25 @@ public class ParkingLotTest {
             Assert.assertEquals(expectedPosition,parkedPosition);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenMultipleVehiclesToPark_WhenSearchedForWhiteColor_ShouldReturnWhiteCarLocations() {
+        try{
+            ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+            Car firstCar = new Car("CG11M7393","SMALL","RED");
+            Car secondCar = new Car("CG04Z1994","SMALL","BLUE");
+            Car thirdCar = new Car("CG012K1964", "SMALL","WHITE");
+            Car fourthCar = new Car("KA01B2030","SMALL","WHITE");
+            parkingLotSystem.parkVehicle(firstCar,DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(secondCar,DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(thirdCar,DriverCategory.NORMAL);
+            parkingLotSystem.parkVehicle(fourthCar,DriverCategory.NORMAL);
+            List white = parkingLotSystem.getCarByColor("WHITE");
+            System.out.println(white.toString());
+        }catch (ParkingLotException e){
+
         }
     }
 }
