@@ -217,8 +217,7 @@ public class ParkingLotTest {
             e.printStackTrace();
         }
     }
-
-
+    //UC11
     @Test
     public void givenLargeCars_whenParked_ShouldParkAtMostFreeSpace() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
@@ -239,7 +238,7 @@ public class ParkingLotTest {
         }
     }
 
-    //
+    //UC12
     @Test
     public void givenParkingLotList_whenFilteredBasedOnWhiteColour_ShouldReturnWhiteCars() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
@@ -260,7 +259,7 @@ public class ParkingLotTest {
         }
     }
 
-
+    //UC13
     @Test
     public void givenMultipleCarsToPark_whenParkedAndSearchedForBlueToyotaCars_ShouldReturnBlueToyotaCarsList() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
@@ -281,9 +280,9 @@ public class ParkingLotTest {
             e.printStackTrace();
         }
     }
-
+    //UC14
     @Test
-    public void givenMultipleCarsParked_whenSearchedForBMWcars_ShouldReturnBMWPosition() {
+    public void givenMultipleCarsParked_whenSearchedForBMWCars_ShouldReturnBMWPosition() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
         Car first = new Car("CG11M0000", "BLUE", "SMALL", "MARUTI", DriverCategory.NORMAL);
         Car second = new Car("CG11M001", "GREEN", "SMALL", "TOYOTA", DriverCategory.NORMAL);
@@ -302,9 +301,9 @@ public class ParkingLotTest {
         }
 
     }
-
+    //UC14
     @Test
-    public void givenMultipleCarsButNoBMW_whenSearchedForBMWcars_ShouldThrowException() {
+    public void givenMultipleCarsButNoBMW_whenSearchedForBMWCars_ShouldThrowException() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
         Car second = new Car("CG11M001", "GREEN", "SMALL", "TOYOTA", DriverCategory.NORMAL);
         Car first = new Car("CG11M0000", "BLUE", "SMALL", "MARUTI", DriverCategory.NORMAL);
@@ -320,9 +319,9 @@ public class ParkingLotTest {
             Assert.assertEquals(ParkingLotException.ExceptionType.NO_SUCH_BRAND, e.type);
         }
     }
-
+    //UC15
     @Test
-    public void givenMultipleCarsparked_whenSearchedForCarsParkedInLast30Mins_ShouldReturRecentParkCarsList() {
+    public void givenMultipleCarsparked_whenSearchedForCarsParkedInLast30Mins_ShouldReturnRecentParkCarsList() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
         Car second = new Car("CG11M001", "GREEN", "SMALL", "TOYOTA", DriverCategory.NORMAL);
         Car first = new Car("CG11M0000", "BLUE", "SMALL", "MARUTI", DriverCategory.NORMAL);
@@ -340,7 +339,7 @@ public class ParkingLotTest {
             e.getMessage();
         }
     }
-
+    //UC16
     @Test
     public void givenMultipleCars_whenCheckedForRowB_ShouldReturnListOfHandicapDriversParked() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);

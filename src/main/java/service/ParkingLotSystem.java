@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class ParkingLotSystem<whiteVehicleDetails> {
+public class ParkingLotSystem {
 
     int parkingLot;
     int parkingSlotInLot;

@@ -36,10 +36,6 @@ public class Car {
         return type;
     }
 
-    public void setType(DriverCategory type) {
-        this.type = type;
-    }
-
     public String getBrand() {
         return brand;
     }
@@ -51,10 +47,6 @@ public class Car {
 
     public String getRegistration() {
         return registration;
-    }
-
-    public void setRegistration(String registration) {
-        this.registration = registration;
     }
 
     public String getSize() {

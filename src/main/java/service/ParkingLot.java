@@ -37,7 +37,6 @@ public class ParkingLot {
     }
 
     // first string is for give position as string type, Second is for Registration of car
-    Map<String, String> parkingPositionMap;
     HashMap<Integer, String> mapSlot = new HashMap<Integer, String>();
 
     public void registerObserver(IObserver observer) {
