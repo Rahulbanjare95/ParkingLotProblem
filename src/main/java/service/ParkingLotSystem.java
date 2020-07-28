@@ -4,7 +4,9 @@ import enums.DriverCategory;
 import exception.ParkingLotException;
 import model.Car;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class ParkingLotSystem<whiteVehicleDetails> {
@@ -40,7 +42,7 @@ public class ParkingLotSystem<whiteVehicleDetails> {
                         e.printStackTrace();
                     }
                 });
-            if (carDetails.getSize().equals("LARGE")){
+            if (carDetails.getSize().equals("LARGE")) {
                 ParkingLot lots = getPositionOnLot();
                 lots.parkVehicle(carDetails);
 
@@ -68,7 +70,6 @@ public class ParkingLotSystem<whiteVehicleDetails> {
         return this.parkingLotList.stream().anyMatch(lot -> lot.isVehiclePresent(carDetails));
     }
 
-
     public String vehicleLocation(Car carDetails) {
         ParkingLot parked = this.parkingLotList.stream()
                 .filter(lot -> lot.isVehiclePresent(carDetails)).findFirst().get();
@@ -78,22 +79,16 @@ public class ParkingLotSystem<whiteVehicleDetails> {
         return vehicleLocation;
     }
 
-    public List findWhiteVehiclePosition(String color) throws ParkingLotException {
+    public List getVehiclePositionByColors(String color) throws ParkingLotException {
         List<String> whiteVehicleDetails = new ArrayList<>();
-        int lot =0;
+        int lotNumber = 0;
         for (ParkingLot parkingLot : parkingLotList) {
             List<Integer> onColor = parkingLot.findOnColor(color);
             if (onColor.size() == 0)
-                throw new ParkingLotException("No such color",ParkingLotException.ExceptionType.NO_SUCH_COLOR);
-            lot++;
-            whiteVehicleDetails.add("lot " + lot + " slot " + onColor);
+                throw new ParkingLotException("No such color", ParkingLotException.ExceptionType.NO_SUCH_COLOR);
+            lotNumber++;
+            whiteVehicleDetails.add("lot " + lotNumber + " slot " + onColor);
         }
-
-//        if (whiteVehicleDetails.contains(color)==0){
-//            throw  new ParkingLotException("No such color",ParkingLotException.ExceptionType.NO_SUCH_COLOR);
-//        }
         return whiteVehicleDetails;
     }
-
-
 }
