@@ -354,7 +354,7 @@ public class ParkingLotTest {
             parkingLotSystem.parkVehicle(third, DriverCategory.NORMAL, "ABC");
             parkingLotSystem.parkVehicle(fourth, DriverCategory.NORMAL, "XYZ");
             List handicaplist = parkingLotSystem.findCarsByRowForHandicap(DriverCategory.HANDICAP, "SMALL");
-            List<String> expected = Arrays.asList(" lot 1 ==  [  Slot: 2 Registration CG11M001 BRAND TOYOTA Size - SMALL AttendantName XYZ]"," lot 2 ==  []");
+            List<String> expected = Arrays.asList(" lot 1 ==  [  Slot: 2 Registration CG11M001 BRAND TOYOTA Size - SMALL AttendantName XYZ]", " lot 2 ==  []");
             Assert.assertEquals(expected, handicaplist);
         } catch (ParkingLotException e) {
             e.getMessage();
@@ -373,9 +373,12 @@ public class ParkingLotTest {
             parkingLotSystem.parkVehicle(second, DriverCategory.NORMAL, "XYZ");
             parkingLotSystem.parkVehicle(third, DriverCategory.NORMAL, "ABC");
             parkingLotSystem.parkVehicle(fourth, DriverCategory.NORMAL, "XYZ");
-            parkingLotSystem.getAllParkedVehicles();
-
+            List allParkedVehicles = parkingLotSystem.getAllParkedVehicles();
+            List<String> explist = Arrays.asList("lot 1==[Slot: 1 Registration CG11M0000, Slot: 2 Registration CG11M001]", "lot 2==[Slot: 1 Registration CG11M0002, Slot: 2 Registration CG11M0003]");
+            Assert.assertEquals(explist,allParkedVehicles);
         } catch (ParkingLotException e) {
-        e.getMessage();
+            e.getMessage();
+        }
     }
+
 }
