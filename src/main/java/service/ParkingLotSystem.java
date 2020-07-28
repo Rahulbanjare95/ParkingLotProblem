@@ -31,7 +31,7 @@ public class ParkingLotSystem<whiteVehicleDetails> {
                 throw new ParkingLotException("Already parked", ParkingLotException.ExceptionType.ALREADY_PARKED);
             }
         }
-        if (type.equals(DriverCategory.HANDICAP)) {
+        if (carDetails.getType().equals(DriverCategory.HANDICAP)) {
             if (carDetails.getSize().equals("SMALL"))
                 IntStream.range(0, parkingLot).filter(lot -> parkingLotList.get(lot)
                         .getNumberOfParkedCars() != parkingSlotInLot)
@@ -48,7 +48,7 @@ public class ParkingLotSystem<whiteVehicleDetails> {
 
             }
         }
-        if (type.equals(DriverCategory.NORMAL)) {
+        if (carDetails.getType().equals(DriverCategory.NORMAL)) {
             ParkingLot lots = getPositionOnLot();
             lots.parkVehicle(carDetails, attendant);
         }
@@ -90,10 +90,6 @@ public class ParkingLotSystem<whiteVehicleDetails> {
             lot++;
             whiteVehicleDetails.add("lot " + lot + " slot " + onColor);
         }
-
-//        if (whiteVehicleDetails.contains(color)==0){
-//            throw  new ParkingLotException("No such color",ParkingLotException.ExceptionType.NO_SUCH_COLOR);
-//        }
         return whiteVehicleDetails;
     }
 
@@ -127,16 +123,32 @@ public class ParkingLotSystem<whiteVehicleDetails> {
 
     public List<String> findCarsParkedByTime(int minutes) throws ParkingLotException {
         List<String> parkingTimeList = new ArrayList<>();
-        int lot =0;
-        for (ParkingLot parkingLot: parkingLotList){
+        int lot = 0;
+        for (ParkingLot parkingLot : parkingLotList) {
             List<Integer> slotsParkedRecently = parkingLot.findCarsParkedRecently(minutes);
             lot++;
-            parkingTimeList.add("lot"+ lot+ " slot "+slotsParkedRecently);
+            parkingTimeList.add("lot" + lot + " slot " + slotsParkedRecently);
         }
-        if (parkingTimeList.size() == 0){
-            throw new ParkingLotException("No Cars Parked in given time",ParkingLotException.ExceptionType.NOT_PARKED_IN_GIVEN_TIME);
+        if (parkingTimeList.size() == 0) {
+            throw new ParkingLotException("No Cars Parked in given time", ParkingLotException.ExceptionType.NOT_PARKED_IN_GIVEN_TIME);
         }
         return parkingTimeList;
 
     }
+
+    public List<String> findCarsByRowForHandicap(DriverCategory type, String size) {
+        List<String> parkedHandicaps = new ArrayList<>();
+        int lot = 0;
+        for (ParkingLot parkingLot : parkingLotList) {
+            List<String> details = parkingLot.findCarsParkedByHandicap(type, size);
+            lot++;
+            parkedHandicaps.add(" lot " + lot + " ==  " + details);
+
+        }
+        return parkedHandicaps;
+
+    }
+
+
 }
+

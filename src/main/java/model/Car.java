@@ -1,6 +1,9 @@
 package model;
 
 
+import enums.DriverCategory;
+
+import java.sql.Driver;
 import java.util.Objects;
 
 public class Car {
@@ -9,22 +12,32 @@ public class Car {
     public String color;
     public String size;
     public String brand;
+    DriverCategory type;
 
     public Car() {
     }
 
-    public Car(String registration, String color, String size) {
+    public Car(String registration, String color, String size, DriverCategory type) {
         this.registration = registration;
         this.color = color;
         this.size = size;
 
     }
 
-    public Car(String registration, String color, String size, String brand) {
+    public Car(String registration, String color, String size, String brand,DriverCategory type) {
         this.registration = registration;
         this.color = color;
         this.size = size;
         this.brand = brand;
+        this.type =type;
+    }
+
+    public DriverCategory getType() {
+        return type;
+    }
+
+    public void setType(DriverCategory type) {
+        this.type = type;
     }
 
     public String getBrand() {

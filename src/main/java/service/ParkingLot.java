@@ -1,5 +1,6 @@
 package service;
 
+import enums.DriverCategory;
 import exception.ParkingLotException;
 import model.Car;
 import model.SlotDetails;
@@ -8,6 +9,7 @@ import observer.IObserver;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -189,17 +191,30 @@ public class ParkingLot {
         return bmwlot;
     }
 
-    private LocalDateTime currentTime(){
-        return  LocalDateTime.now();
+    private LocalDateTime currentTime() {
+        return LocalDateTime.now();
     }
 
     public List<Integer> findCarsParkedRecently(int minutes) {
         List<Integer> timingslot = new ArrayList<>();
-        for (Integer slot: carsParkingDetails.keySet()){
-            if (carsParkingDetails.get(slot).getTime().getMinute() - currentTime().getMinute()<=minutes){
+        for (Integer slot : carsParkingDetails.keySet()) {
+            if (carsParkingDetails.get(slot).getTime().getMinute() - currentTime().getMinute() <= minutes) {
                 timingslot.add(slot);
             }
         }
         return timingslot;
     }
+
+    public List<String> findCarsParkedByHandicap(DriverCategory type, String size) {
+        return this.carsParkingDetails.values().stream().filter(slotDetails1 -> slotDetails1.getCar().getType() == (type))
+                .filter(slotDetails1 -> slotDetails1.getCar().getSize().equals(size))
+                .map(slotDetails1 -> (("  Slot: " + slotDetails1.getSlotNu() +
+                        " Registration " + slotDetails1.getCar().getRegistration()
+                        + " BRAND " + slotDetails1.getCar().getBrand() + " Size - " +
+                        slotDetails1.getCar().getSize() + " AttendantName "
+                        + slotDetails1.getAttendantName()))).collect(Collectors.toList());
+
+    }
+
+
 }

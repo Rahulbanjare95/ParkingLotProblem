@@ -1,5 +1,7 @@
 package model;
 
+import enums.DriverCategory;
+
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -9,12 +11,14 @@ public class SlotDetails {
     Car car;
     String attendantName;
 
+
     public SlotDetails(int slotNu, Car car, LocalTime time, String attendantName) {
         this.slotNu = slotNu;
         this.time = time;
         this.car = car;
         this.attendantName = attendantName;
     }
+
 
     public Car getCar() {
         return car;
