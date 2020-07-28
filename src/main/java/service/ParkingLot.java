@@ -217,4 +217,7 @@ public class ParkingLot {
     }
 
 
+    public List<String> findAllCarsParked() {
+        return this.carsParkingDetails.entrySet().stream().collect()
+    }
 }

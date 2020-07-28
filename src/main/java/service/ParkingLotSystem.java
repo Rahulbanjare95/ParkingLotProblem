@@ -150,5 +150,12 @@ public class ParkingLotSystem<whiteVehicleDetails> {
     }
 
 
+    public void getAllParkedVehicles() {
+        List<String> parkedVehicles = new ArrayList<>();
+        int lot =0;
+        for (ParkingLot parkingLot : parkingLotList){
+            List<String> allParked = parkingLot.findAllCarsParked();
+        }
+    }
 }
 

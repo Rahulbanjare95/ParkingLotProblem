@@ -342,7 +342,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenMultipleCars_whenCheckedForRowB_ShouldReturnListOfHandicapDriversParked() {
+    public void givenMultipleCars_whenCheckedForHandicapDriverAndSmallCar_ShouldReturnListOfHandicapDriversParked() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
         Car first = new Car("CG11M0000", "BLUE", "SMALL", "MARUTI", DriverCategory.NORMAL);
         Car second = new Car("CG11M001", "GREEN", "SMALL", "TOYOTA", DriverCategory.HANDICAP);
@@ -357,7 +357,25 @@ public class ParkingLotTest {
             List<String> expected = Arrays.asList(" lot 1 ==  [  Slot: 2 Registration CG11M001 BRAND TOYOTA Size - SMALL AttendantName XYZ]"," lot 2 ==  []");
             Assert.assertEquals(expected, handicaplist);
         } catch (ParkingLotException e) {
+            e.getMessage();
         }
+    }
 
+    @Test
+    public void givenMultipleCarsParked_whenCheckedForAllParkedCars_ShouldReturnAllParkedCars() {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
+        Car first = new Car("CG11M0000", "BLUE", "SMALL", "MARUTI", DriverCategory.NORMAL);
+        Car second = new Car("CG11M001", "GREEN", "SMALL", "TOYOTA", DriverCategory.HANDICAP);
+        Car third = new Car("CG11M0002", "SILVER", "SMALL", "FORD", DriverCategory.NORMAL);
+        Car fourth = new Car("CG11M0003", "BLUE", "SMALL", "KIA", DriverCategory.NORMAL);
+        try {
+            parkingLotSystem.parkVehicle(first, DriverCategory.NORMAL, "ABC");
+            parkingLotSystem.parkVehicle(second, DriverCategory.NORMAL, "XYZ");
+            parkingLotSystem.parkVehicle(third, DriverCategory.NORMAL, "ABC");
+            parkingLotSystem.parkVehicle(fourth, DriverCategory.NORMAL, "XYZ");
+            parkingLotSystem.getAllParkedVehicles();
+
+        } catch (ParkingLotException e) {
+        e.getMessage();
     }
 }
