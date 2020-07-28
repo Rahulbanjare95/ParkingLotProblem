@@ -12,7 +12,6 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
-@SuppressWarnings("ALL")
 public class ParkingLotTest {
 
     ParkingLot parkingLot = new ParkingLot(3);
@@ -126,6 +125,7 @@ public class ParkingLotTest {
     }
 
     // UC 9 Refactored uses ParkingLotSystem to park
+
     @Test
     public void givenVehicle_whenParkedinMultipleLots_ShouldBeParkedEvenly() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
@@ -337,7 +337,7 @@ public class ParkingLotTest {
             List<String> list = Arrays.asList("lot1 slot [1, 2]", "lot2 slot [1, 2]");
             Assert.assertEquals(list, carsParkedByTime);
         } catch (ParkingLotException e) {
-
+            e.getMessage();
         }
     }
 
@@ -354,7 +354,7 @@ public class ParkingLotTest {
             parkingLotSystem.parkVehicle(third, DriverCategory.NORMAL, "ABC");
             parkingLotSystem.parkVehicle(fourth, DriverCategory.NORMAL, "XYZ");
             List handicaplist = parkingLotSystem.findCarsByRowForHandicap(DriverCategory.HANDICAP, "SMALL");
-            List<String> expected = Arrays.asList("lot 1 ==  [  Slot: 2 Registration CG11M001 BRAND TOYOTA Size - SMALL AttendantName XYZ]", "lot 2 ==  []");
+            List<String> expected = Arrays.asList(" lot 1 ==  [  Slot: 2 Registration CG11M001 BRAND TOYOTA Size - SMALL AttendantName XYZ]"," lot 2 ==  []");
             Assert.assertEquals(expected, handicaplist);
         } catch (ParkingLotException e) {
         }
