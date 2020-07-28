@@ -319,4 +319,25 @@ public class ParkingLotTest {
             Assert.assertEquals(ParkingLotException.ExceptionType.NO_SUCH_BRAND, e.type);
         }
     }
+
+    @Test
+    public void givenMultipleCarsparked_whenSearchedForCarsParkedInLast30Mins_ShouldReturRecentParkCarsList() {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2, 2);
+        Car first = new Car("CG11M0000", "BLUE", "SMALL", "MARUTI");
+        Car second = new Car("CG11M001", "GREEN", "SMALL", "TOYOTA");
+        Car third = new Car("CG11M0002", "SILVER", "SMALL", "FORD");
+        Car fourth = new Car("CG11M0003", "BLUE", "SMALL", "KIA");
+        try {
+            parkingLotSystem.parkVehicle(first, DriverCategory.NORMAL, "ABC");
+            parkingLotSystem.parkVehicle(second, DriverCategory.NORMAL, "XYZ");
+            parkingLotSystem.parkVehicle(third, DriverCategory.NORMAL, "ABC");
+            parkingLotSystem.parkVehicle(fourth, DriverCategory.NORMAL, "XYZ");
+            List carsParkedByTime = parkingLotSystem.findCarsParkedByTime(30);
+            List<String> list = Arrays.asList("lot1 slot [1, 2]", "lot2 slot [1, 2]");
+            Assert.assertEquals(list,carsParkedByTime);
+        } catch (ParkingLotException e) {
+
+        }
+    }
+    
 }

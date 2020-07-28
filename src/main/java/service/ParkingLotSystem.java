@@ -124,4 +124,19 @@ public class ParkingLotSystem<whiteVehicleDetails> {
         }
         return lisofBMWCars;
     }
+
+    public List<String> findCarsParkedByTime(int minutes) throws ParkingLotException {
+        List<String> parkingTimeList = new ArrayList<>();
+        int lot =0;
+        for (ParkingLot parkingLot: parkingLotList){
+            List<Integer> slotsParkedRecently = parkingLot.findCarsParkedRecently(minutes);
+            lot++;
+            parkingTimeList.add("lot"+ lot+ " slot "+slotsParkedRecently);
+        }
+        if (parkingTimeList.size() == 0){
+            throw new ParkingLotException("No Cars Parked in given time",ParkingLotException.ExceptionType.NOT_PARKED_IN_GIVEN_TIME);
+        }
+        return parkingTimeList;
+
+    }
 }

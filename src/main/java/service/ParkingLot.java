@@ -5,6 +5,7 @@ import model.Car;
 import model.SlotDetails;
 import observer.IObserver;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -186,5 +187,19 @@ public class ParkingLot {
             }
         }
         return bmwlot;
+    }
+
+    private LocalDateTime currentTime(){
+        return  LocalDateTime.now();
+    }
+
+    public List<Integer> findCarsParkedRecently(int minutes) {
+        List<Integer> timingslot = new ArrayList<>();
+        for (Integer slot: carsParkingDetails.keySet()){
+            if (carsParkingDetails.get(slot).getTime().getMinute() - currentTime().getMinute()<=minutes){
+                timingslot.add(slot);
+            }
+        }
+        return timingslot;
     }
 }
