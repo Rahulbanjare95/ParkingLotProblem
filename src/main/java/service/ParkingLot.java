@@ -1,5 +1,6 @@
 package service;
 
+import enums.CarSize;
 import enums.DriverCategory;
 import exception.ParkingLotException;
 import model.Car;
@@ -31,9 +32,7 @@ public class ParkingLot {
     }
 
     public void initialiseMap(int capacity) {
-        for (int i = 1; i <= capacity; i++) {
-            mapSlot.put(i, " ");
-        }
+        IntStream.rangeClosed(1, capacity).forEachOrdered(i -> mapSlot.put(i, " "));
     }
 
     HashMap<Integer, String> mapSlot = new HashMap<Integer, String>();
@@ -51,34 +50,24 @@ public class ParkingLot {
     List<Map<String, Car>> parking = new ArrayList<>();
 
     public void parkWithDetails(Integer position, String registration) throws ParkingLotException {
+        System.out.println(mapSlot.toString());
         if (mapSlot.size() > capacity) {
-            for (IObserver observer : observers) {
-                observer.parkingLotFull(true);
-            }
+            observers.forEach(observer -> observer.parkingLotFull(true));
             throw new ParkingLotException("Parking Full",
                     ParkingLotException.ExceptionType.PARKING_LOT_FULL);
         }
-        if (mapSlot.containsValue(registration))
-            throw new ParkingLotException("Already parked", ParkingLotException.ExceptionType.WRONG_DETAILS);
-        if (mapSlot.size() < capacity) {
-            mapSlot.put(position, registration);
-        }
+        if (mapSlot.containsValue(registration)) throw new AssertionError("Already parked");
+        if (mapSlot.size() < capacity) mapSlot.put(position, registration);
     }
 
     public int vehiclePresentPosition(String registration) throws ParkingLotException {
         this.parkWithDetails(position, registration);
-        if (parking.contains(registration)) {
-            return this.getKey(mapSlot, registration);
-        } else return 0;
+        return parking.contains(registration) ? this.getKey(mapSlot, registration) : Integer.valueOf(0);
     }
 
     public <K, V> K getKey(Map<K, V> map, V value) {
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            if (entry.getValue().equals(value)) {
-                return entry.getKey();
-            }
-        }
-        return null;
+        return map.entrySet().stream().filter(entry -> entry.getValue().equals(value))
+                .findFirst().map(Map.Entry::getKey).orElse(null);
     }
 
     public int getPositionOfVehicle(String registration) {
@@ -98,9 +87,7 @@ public class ParkingLot {
     public boolean unParkCar(String registration) throws ParkingLotException {
         if (mapSlot.containsKey(registration)) {
             mapSlot.remove(registration);
-            for (IObserver observer : observers) {
-                observer.parkingLotAvailable(true);
-            }
+            observers.stream().forEachOrdered(observer -> observer.parkingLotAvailable(true));
             return true;
         }
         throw new ParkingLotException("No such model exist", ParkingLotException.ExceptionType.WRONG_DETAILS);
@@ -153,32 +140,26 @@ public class ParkingLot {
     }
 
     public List<Integer> findOnColor(String color) {
-        List<Integer> colorslot = new ArrayList<>();
-        for (Integer slot : carsParkingDetails.keySet()) {
-            if (carsParkingDetails.get(slot).getCar().getColor().equals(color)) {
-                colorslot.add(slot);
-            }
-        }
+        List<Integer> colorslot = carsParkingDetails.keySet().stream()
+                .filter(slot -> carsParkingDetails.get(slot).getCar().getColor().equals(color))
+                .collect(Collectors.toList());
         return colorslot;
     }
 
     public List<String> findbyColorAndCompany(String color, String brand) {
-        List<String> attendants = new ArrayList<>();
-        for (Integer slot : carsParkingDetails.keySet()) {
-            if (carsParkingDetails.get(slot).getCar().getColor().equals(color) && carsParkingDetails.get(slot).getCar().getBrand().equals(brand))
-                attendants.add(slot + " " + carsParkingDetails.get(slot).getCar().getRegistration() + " " + carsParkingDetails.get(slot).getAttendantName());
-        }
+        List<String> attendants = carsParkingDetails.keySet().stream()
+                .filter(slot -> carsParkingDetails.get(slot).getCar().getColor().equals(color) &&
+                        carsParkingDetails.get(slot).getCar().getBrand().equals(brand))
+                .map(slot -> slot + " " + carsParkingDetails.get(slot).getCar().getRegistration() + " " +
+                        carsParkingDetails.get(slot).getAttendantName()).collect(Collectors.toList());
         return attendants;
 
     }
 
     public List<Integer> findCarsByBrand(String brand) {
-        List<Integer> slots = new ArrayList<>();
-        for (Integer slot : carsParkingDetails.keySet()) {
-            if (carsParkingDetails.get(slot).getCar().getBrand().equals(brand)) {
-                slots.add(slot);
-            }
-        }
+        List<Integer> slots = carsParkingDetails.keySet()
+                .stream().filter(slot -> carsParkingDetails.get(slot).getCar().getBrand().equals(brand))
+                .collect(Collectors.toList());
         return slots;
     }
 
@@ -187,16 +168,13 @@ public class ParkingLot {
     }
 
     public List<Integer> findCarsParkedRecently(int minutes) {
-        List<Integer> slots = new ArrayList<>();
-        for (Integer slot : carsParkingDetails.keySet()) {
-            if (carsParkingDetails.get(slot).getTime().getMinute() - currentTime().getMinute() <= minutes) {
-                slots.add(slot);
-            }
-        }
+        List<Integer> slots = carsParkingDetails.keySet().stream()
+                .filter(slot -> carsParkingDetails.get(slot).getTime().getMinute() - currentTime().getMinute() <= minutes)
+                .collect(Collectors.toList());
         return slots;
     }
 
-    public List<String> findCarsParkedByHandicap(DriverCategory type, String size) {
+    public List<String> findCarsParkedByHandicap(DriverCategory type, CarSize size) {
         return this.carsParkingDetails.values().stream().filter(slotDetails1 -> slotDetails1.getCar().getType() == (type))
                 .filter(slotDetails1 -> slotDetails1.getCar().getSize().equals(size))
                 .map(slotDetails1 -> (("  Slot: " + slotDetails1.getSlotNu() +
@@ -207,7 +185,8 @@ public class ParkingLot {
     }
 
     public List<String> findAllCarsParked() {
-        return this.carsParkingDetails.values().stream().map(details -> (("Slot: " + details.getSlotNu() + " Registration " +
+        return this.carsParkingDetails.values().stream()
+                .map(details -> (("Slot: " + details.getSlotNu() + " Registration " +
                 details.getCar().getRegistration() + ""))).collect(Collectors.toList());
     }
 }
